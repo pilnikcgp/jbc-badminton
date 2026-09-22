@@ -42,8 +42,11 @@ Web je neveřejný: `<meta name="robots" content="noindex">` a hlavička
    ```
 
 > **Uspávání:** bezplatný projekt se po zhruba týdnu bez provozu uspí a web
-> pak nenačte data. Před otevřením registrace projekt v Supabase zkontrolujte
-> (případně *Restore project*).
+> pak nenačte data. Brání tomu GitHub Actions workflow
+> `.github/workflows/supabase-keepalive.yml`, který v pondělí a ve čtvrtek pošle
+> jeden čtecí dotaz. Když selže, GitHub pošle e-mail; projekt pak v Supabase
+> probuďte (*Restore project*). Ručně ho spustíte v *Actions → Supabase
+> keep-alive → Run workflow*. Při změně anon klíče ho aktualizujte i ve workflow.
 
 ## 2. Proměnné prostředí a lokální vývoj
 

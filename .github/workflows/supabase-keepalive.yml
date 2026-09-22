@@ -1,0 +1,32 @@
+# Udržuje bezplatný Supabase projekt vzhůru: ten se po ~7 dnech bez provozu uspí
+# a web pak nenačte data. Dvakrát týdně pošle jeden čtecí dotaz přes REST API.
+# Když dotaz selže (projekt uspaný, špatný klíč…), GitHub pošle e-mail o chybě.
+#
+# URL a anon klíč jsou stejné veřejné hodnoty jako na webu (klíč je v JavaScriptu
+# stránky, data chrání RLS). Při změně klíče v Supabase je aktualizujte i tady.
+
+name: Supabase keep-alive
+
+on:
+  schedule:
+    - cron: '17 6 * * 1,4' # pondělí a čtvrtek 6:17 UTC
+  workflow_dispatch: # ruční spuštění: Actions → Supabase keep-alive → Run workflow
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SUPABASE_URL: https://trwpfkhlgapcazxedizn.supabase.co
+      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRyd3Bma2hsZ2FwY2F6eGVkaXpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAxMDY4NTMsImV4cCI6MjEwNTY4Mjg1M30.LoMntZ1Q6QXB-MeFZ0UJZO5NhEMGQV8KUR9xnSGNOUs
+    steps:
+      - name: Dotaz na aktuální ročník
+        run: |
+          curl --fail-with-body --silent --show-error \
+            --retry 3 --retry-delay 20 --retry-all-errors \
+            "$SUPABASE_URL/rest/v1/current_edition?select=year,status" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY"
+          echo
