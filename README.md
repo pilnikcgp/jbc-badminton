@@ -141,8 +141,10 @@ v databázi chybí.
 - Popisky (volitelné): `gallery-originals/popisky.json`, např.
   `{ "01-finale.jpg": "Finále 2026" }`.
 - Web zobrazuje přesně fotky, které jsou v `gallery-originals/`: co tam chybí,
-  skript z `public/gallery/` odstraní. Zástupné fotky `foto-01` až `foto-08`
-  proto zmizí samy při prvním spuštění se skutečnými fotkami.
+  skript z `public/gallery/` odstraní.
+- První fotka je v mřížce velká (2 × 2 dlaždice, na mobilu přes celou šířku),
+  ostatní se řadí vedle ní po čtyřech. Úplný obdélník bez mezer vyjde při
+  5, 9, 13… fotkách (1 velká + násobek čtyř).
 
 ### Hero fotka
 

@@ -33,7 +33,9 @@ export async function initGallery(root: HTMLElement) {
         ${photos
           .map(
             (p, i) => `<li><button type="button" class="gallery-item" data-index="${i}" aria-label="Zvětšit: ${escapeHtml(altOf(p, i))}">
-              <img src="${p.thumb}" width="${p.thumbWidth}" height="${p.thumbHeight}" alt="${escapeHtml(altOf(p, i))}" loading="lazy" decoding="async" />
+              <img src="${p.thumb}" srcset="${p.thumb} ${p.thumbWidth}w, ${p.full} ${p.width}w"
+                   sizes="${i === 0 ? '(max-width: 640px) 100vw, 50vw' : '(max-width: 640px) 50vw, 25vw'}"
+                   width="${p.thumbWidth}" height="${p.thumbHeight}" alt="${escapeHtml(altOf(p, i))}" loading="lazy" decoding="async" />
             </button></li>`,
           )
           .join('')}

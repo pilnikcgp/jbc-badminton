@@ -1,74 +1,47 @@
 [
   {
-    "thumb": "/gallery/thumb/foto-01.webp",
-    "thumbWidth": 640,
-    "thumbHeight": 427,
-    "full": "/gallery/full/foto-01.webp",
-    "width": 1600,
-    "height": 1067,
-    "alt": ""
-  },
-  {
-    "thumb": "/gallery/thumb/foto-02.webp",
-    "thumbWidth": 640,
-    "thumbHeight": 853,
-    "full": "/gallery/full/foto-02.webp",
-    "width": 1200,
-    "height": 1600,
-    "alt": ""
-  },
-  {
-    "thumb": "/gallery/thumb/foto-03.webp",
-    "thumbWidth": 640,
-    "thumbHeight": 427,
-    "full": "/gallery/full/foto-03.webp",
-    "width": 1600,
-    "height": 1067,
-    "alt": ""
-  },
-  {
-    "thumb": "/gallery/thumb/foto-04.webp",
-    "thumbWidth": 640,
-    "thumbHeight": 480,
-    "full": "/gallery/full/foto-04.webp",
-    "width": 1600,
-    "height": 1200,
-    "alt": ""
-  },
-  {
-    "thumb": "/gallery/thumb/foto-05.webp",
-    "thumbWidth": 640,
-    "thumbHeight": 960,
-    "full": "/gallery/full/foto-05.webp",
-    "width": 1067,
-    "height": 1600,
-    "alt": ""
-  },
-  {
-    "thumb": "/gallery/thumb/foto-06.webp",
+    "thumb": "/gallery/thumb/01-spolecna-fotka.webp",
     "thumbWidth": 640,
     "thumbHeight": 360,
-    "full": "/gallery/full/foto-06.webp",
-    "width": 1600,
-    "height": 900,
-    "alt": ""
+    "full": "/gallery/full/01-spolecna-fotka.webp",
+    "width": 2000,
+    "height": 1125,
+    "alt": "Společná fotka hráček a hráčů v hale"
   },
   {
-    "thumb": "/gallery/thumb/foto-07.webp",
+    "thumb": "/gallery/thumb/02-zapas.webp",
     "thumbWidth": 640,
-    "thumbHeight": 427,
-    "full": "/gallery/full/foto-07.webp",
-    "width": 1600,
-    "height": 1067,
-    "alt": ""
+    "thumbHeight": 360,
+    "full": "/gallery/full/02-zapas.webp",
+    "width": 2000,
+    "height": 1125,
+    "alt": "Zápas smíšené čtyřhry"
   },
   {
-    "thumb": "/gallery/thumb/foto-08.webp",
+    "thumb": "/gallery/thumb/03-selfie.webp",
     "thumbWidth": 640,
-    "thumbHeight": 640,
-    "full": "/gallery/full/foto-08.webp",
-    "width": 1400,
-    "height": 1400,
-    "alt": ""
+    "thumbHeight": 360,
+    "full": "/gallery/full/03-selfie.webp",
+    "width": 2000,
+    "height": 1125,
+    "alt": "Selfie mezi zápasy"
+  },
+  {
+    "thumb": "/gallery/thumb/04-medaile.webp",
+    "thumbWidth": 640,
+    "thumbHeight": 360,
+    "full": "/gallery/full/04-medaile.webp",
+    "width": 2000,
+    "height": 1125,
+    "alt": "Vyhlášení výsledků s medailemi"
+  },
+  {
+    "thumb": "/gallery/thumb/05-posezeni.webp",
+    "thumbWidth": 640,
+    "thumbHeight": 360,
+    "full": "/gallery/full/05-posezeni.webp",
+    "width": 2000,
+    "height": 1125,
+    "alt": "Posezení po turnaji"
   }
 ]

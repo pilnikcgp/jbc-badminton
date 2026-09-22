@@ -681,13 +681,39 @@ textarea:focus-visible {
   vertical-align: baseline;
 }
 
+/* 4 sloupce, první fotka velká přes 2×2; na mobilu 2 sloupce a první přes celou šířku.
+   Pro 5 fotek tak vyjde úplný obdélník bez osiřelé dlaždice. */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(240px, 45%), 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.gallery-grid > li:first-child {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.gallery-grid > li:first-child .gallery-item {
+  height: 100%;
+  aspect-ratio: auto;
+}
+
+@media (max-width: 640px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .gallery-grid > li:first-child {
+    grid-row: auto;
+  }
+
+  .gallery-grid > li:first-child .gallery-item {
+    aspect-ratio: 16 / 9;
+  }
 }
 
 .gallery-item {
@@ -699,7 +725,7 @@ textarea:focus-visible {
   overflow: hidden;
   background: var(--white);
   cursor: zoom-in;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
 }
 
 .gallery-item img {
