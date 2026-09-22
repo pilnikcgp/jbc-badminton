@@ -11,7 +11,7 @@ export const site = {
   hero: {
     /** Fotka přes celou šířku, soubor v public/. Autentický moment s lidmi, ne prázdný kurt. */
     image: '/hero.jpg',
-    imageAlt: 'Společná fotka hráček a hráčů s medailemi na kurtu po minulém ročníku',
+    imageAlt: 'Hráčky a hráči s raketami nad hlavou na kurtu v hale během minulého ročníku',
     /**
      * Druhý řádek názvu (první řádek je `name`). {year} se nahradí rokem
      * aktuálního ročníku z databáze.
