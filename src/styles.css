@@ -1,56 +1,43 @@
 /* ==========================================================================
-   Tokeny
+   Vizuální identita JIC (Design manuál JIC 2.0)
+   Fialová = texty, logo, tlačítka. Ostatní primární barvy jen jako pozadí.
+   Bílý text jen na fialové. Ostré rohy, bez stínů. Jen světlý režim.
    ========================================================================== */
 
 :root {
-  --brand: #134e3a;
-  --brand-ink: #ffffff;
-  --accent: #c9f24a;
-  --accent-ink: #13261d;
+  /* Primární paleta */
+  --jic-purple: #640aba;
+  --jic-lilac: #e1dce6;
+  --jic-blue: #88c9ff;
+  --jic-green: #80d888;
+  --jic-yellow: #ffd880;
+  --jic-coral: #ff8d80;
+  --jic-pink: #ff92bf;
+  --white: #ffffff;
 
-  --bg: #f6f5f0;
-  --surface: #ffffff;
-  --surface-2: #eeede6;
-  --ink: #1b1f1d;
-  --muted: #5d6661;
-  --line: #dcdad0;
-  --focus: #1d7fd6;
+  /* Sekundární paleta – jen drobné akcenty */
+  --jic-blue-2: #73bcff;
+  --jic-green-2: #6dcb78;
+  --jic-yellow-2: #ffcd59;
+  --jic-coral-2: #ff8066;
+  --jic-pink-2: #ff80ad;
 
-  --ok-bg: #e3f4e5;
-  --ok-ink: #145c23;
-  --error-bg: #fbe4e2;
-  --error-ink: #8c1d18;
+  --ink: var(--jic-purple);
 
-  /* Medaile – pozadí buněk. Text zůstává tmavý v obou režimech. */
-  --gold: #f4c542;
-  --silver: #cfd5dc;
-  --bronze: #e0a370;
-  --medal-ink: #1b1f1d;
+  /* Písma: dočasné volné náhrady. Po potvrzení webové licence stačí sem
+     doplnit 'GT America' a 'GT Super Display' (a jejich @font-face). */
+  --font-sans: 'Archivo', 'Helvetica Neue', Arial, sans-serif; /* za GT America */
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif; /* za GT Super Display */
 
-  --radius: 12px;
-  --radius-sm: 6px;
-  --shadow: 0 6px 24px rgb(0 0 0 / 0.12);
-  --container: 1120px;
+  --container: 1160px;
   --gutter: 16px;
-
-  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --edge: 40px; /* velikost čtverců v oddělovačích sekcí */
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (max-width: 640px) {
   :root {
-    --brand: #1c6b50;
-    --bg: #121614;
-    --surface: #1a1f1c;
-    --surface-2: #232a26;
-    --ink: #eef1ee;
-    --muted: #a3ada7;
-    --line: #333b36;
-    --focus: #6cb4ff;
-    --ok-bg: #173a22;
-    --ok-ink: #b6eac1;
-    --error-bg: #45201d;
-    --error-ink: #ffc9c3;
-    --shadow: 0 6px 24px rgb(0 0 0 / 0.5);
+    --edge: 24px;
   }
 }
 
@@ -77,23 +64,44 @@ html {
 
 body {
   margin: 0;
-  font-family: var(--font);
-  font-size: 1rem;
-  line-height: 1.55;
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  letter-spacing: 0;
   color: var(--ink);
-  background: var(--bg);
+  background: var(--white);
 }
 
 h1,
 h2,
-h3 {
-  line-height: 1.15;
+h3,
+h4 {
   margin: 0 0 0.5em;
+  letter-spacing: 0;
 }
 
+/* H2: GT Super Display Regular */
 h2 {
-  font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.25rem);
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
+  line-height: 1.2;
+}
+
+/* H3: GT America Bold */
+h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+/* H4 (mezititulek): GT America Medium */
+h4 {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 1.2;
 }
 
 p {
@@ -104,9 +112,13 @@ a {
   color: inherit;
 }
 
+strong {
+  font-weight: 700;
+}
+
 :focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
+  outline: 3px solid var(--jic-purple);
+  outline-offset: 3px;
 }
 
 .container {
@@ -115,22 +127,13 @@ a {
   padding: 0 var(--gutter);
 }
 
-.section {
-  padding: clamp(48px, 8vw, 96px) 0;
-}
-
-.section:nth-of-type(even) {
-  background: var(--surface);
-}
-
 .lead {
-  font-size: 1.1rem;
-  color: var(--muted);
+  font-size: 1.2rem;
   max-width: 62ch;
 }
 
 .muted {
-  color: var(--muted);
+  font-weight: 400;
 }
 
 .sr-only {
@@ -145,23 +148,66 @@ a {
   border: 0;
 }
 
-.notice {
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
+/* ==========================================================================
+   Sekce: střídání bílé a lila, pixelové oddělovače
+   ========================================================================== */
+
+.section {
+  position: relative;
+  padding: clamp(56px, 9vw, 112px) 0;
+  background: var(--white);
 }
 
-.notice-ok {
-  background: var(--ok-bg);
-  color: var(--ok-ink);
+.about,
+.gallery,
+.site-footer {
+  background: var(--jic-lilac);
 }
 
-.notice-error {
-  background: var(--error-bg);
-  color: var(--error-ink);
+/* Oddělovač: několik čtverců barvy sekce „vystupuje“ do sekce nad ní.
+   Jeden pseudoelement, další čtverce jsou ostré box-shadow bez rozostření. */
+.registration::before,
+.history::before,
+.gallery::before,
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--edge));
+  width: var(--edge);
+  height: var(--edge);
+}
+
+/* bílá do lila, vlevo */
+.registration::before,
+.history::before {
+  left: 0;
+  background: var(--white);
+  box-shadow:
+    var(--edge) 0 0 0 var(--white),
+    0 calc(-1 * var(--edge)) 0 0 var(--white),
+    calc(3 * var(--edge)) 0 0 0 var(--white);
+}
+
+/* lila do bílé, vpravo, s jedním akcentem */
+.gallery::before,
+.site-footer::before {
+  right: 0;
+  background: var(--jic-lilac);
+  box-shadow:
+    calc(-1 * var(--edge)) 0 0 0 var(--jic-lilac),
+    0 calc(-1 * var(--edge)) 0 0 var(--jic-lilac),
+    calc(-2 * var(--edge)) calc(-1 * var(--edge)) 0 0 var(--jic-yellow);
+}
+
+.site-footer::before {
+  box-shadow:
+    calc(-1 * var(--edge)) 0 0 0 var(--jic-lilac),
+    0 calc(-1 * var(--edge)) 0 0 var(--jic-lilac),
+    calc(-3 * var(--edge)) 0 0 0 var(--jic-lilac);
 }
 
 /* ==========================================================================
-   Tlačítka a formuláře
+   Tlačítka, hlášky, formuláře
    ========================================================================== */
 
 .btn {
@@ -169,23 +215,25 @@ a {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 48px;
-  padding: 0 24px;
-  border: 0;
-  border-radius: 999px;
+  min-height: 52px;
+  padding: 0 28px;
+  border: 2px solid var(--jic-purple);
+  border-radius: 0;
+  background: var(--jic-purple);
+  color: var(--white);
   font: inherit;
   font-weight: 700;
+  font-size: 1.0625rem;
   text-decoration: none;
   cursor: pointer;
-  transition: transform 0.12s ease, filter 0.12s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .btn:hover {
-  filter: brightness(1.06);
-}
-
-.btn:active {
-  transform: translateY(1px);
+  background: var(--white);
+  color: var(--jic-purple);
 }
 
 .btn:disabled {
@@ -193,32 +241,33 @@ a {
   cursor: progress;
 }
 
-.btn-primary {
-  background: var(--brand);
-  color: var(--brand-ink);
+.notice {
+  padding: 14px 18px;
+  border-radius: 0;
 }
 
-.btn-accent {
-  background: var(--accent);
-  color: var(--accent-ink);
+.notice-ok {
+  background: var(--jic-green);
+  font-weight: 700;
 }
 
-.btn-lg {
-  min-height: 56px;
-  padding: 0 32px;
-  font-size: 1.1rem;
+/* Chyby tučně fialově na korálové, ne červeně. Korálová má s fialovou
+   kontrast 4,1 : 1, proto velký tučný text (≥ 18,7 px podle WCAG). */
+.notice-error {
+  background: var(--jic-coral);
+  font-weight: 700;
+  font-size: 1.1875rem;
 }
 
 .notice-info {
-  background: var(--surface-2);
-  color: var(--ink);
+  background: var(--jic-lilac);
 }
 
 .field {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin: 0 0 18px;
+  margin: 0 0 20px;
   padding: 0;
   border: 0;
   min-width: 0;
@@ -226,7 +275,7 @@ a {
 
 .field label,
 .field legend {
-  font-weight: 600;
+  font-weight: 500;
   padding: 0;
 }
 
@@ -235,21 +284,21 @@ a {
 }
 
 .field small {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
 
 input[type='text'],
 input[type='email'],
 textarea {
   width: 100%;
-  min-height: 48px;
+  min-height: 50px;
   padding: 10px 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  color: var(--ink);
+  border: 2px solid var(--jic-purple);
+  border-radius: 0;
+  background: var(--white);
+  color: var(--jic-purple);
   font: inherit;
-  font-size: 1rem; /* ≥16 px, aby iOS při fokusu nezoomoval */
+  font-size: 1.0625rem; /* ≥16 px, aby iOS při fokusu nezoomoval */
 }
 
 textarea {
@@ -258,13 +307,21 @@ textarea {
 
 input:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 0;
-  border-color: transparent;
+  outline: 3px solid var(--jic-purple);
+  outline-offset: 2px;
 }
 
-.was-validated :invalid {
-  border-color: var(--error-ink);
+/* Neplatné pole: korálový rámeček kolem, text zůstává na bílé. */
+.was-validated input:invalid,
+.was-validated textarea:invalid {
+  outline: 4px solid var(--jic-coral);
+  outline-offset: 0;
+}
+
+.was-validated input:invalid:focus-visible,
+.was-validated textarea:invalid:focus-visible {
+  outline: 3px solid var(--jic-purple);
+  outline-offset: 2px;
 }
 
 .segmented {
@@ -290,27 +347,27 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 48px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
+  min-height: 50px;
+  border: 2px solid var(--jic-purple);
+  background: var(--white);
   cursor: pointer;
 }
 
 .segmented input:checked + span {
-  background: var(--brand);
-  border-color: var(--brand);
-  color: var(--brand-ink);
+  background: var(--jic-purple);
+  color: var(--white);
   font-weight: 700;
 }
 
 .segmented input:focus-visible + span {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
+  outline: 3px solid var(--jic-purple);
+  outline-offset: 3px;
 }
 
 .was-validated .segmented input:invalid + span {
-  border-color: var(--error-ink);
+  background: var(--jic-coral);
+  font-weight: 700;
+  font-size: 1.1875rem;
 }
 
 .hp {
@@ -330,19 +387,23 @@ textarea:focus-visible {
 }
 
 /* ==========================================================================
-   Hero
+   Hero: fotka s pixelovou maskou
    ========================================================================== */
 
 .hero {
+  /* výška hero a velikost čtverce: 5 čtverců na kratší stranu */
+  --hero-h: max(520px, min(88vh, 760px));
+  --px: calc(min(100vw, var(--hero-h)) / 5);
   position: relative;
-  display: flex;
-  align-items: flex-end;
-  min-height: min(92vh, 820px);
-  min-height: min(92svh, 820px);
-  padding: 96px 0 clamp(48px, 10vw, 96px);
+  height: var(--hero-h);
   overflow: hidden;
-  color: #fff;
-  background: linear-gradient(135deg, #134e3a, #0b2a20);
+  background: var(--jic-lilac);
+}
+
+@supports (height: 1svh) {
+  .hero {
+    --hero-h: max(520px, min(88svh, 760px));
+  }
 }
 
 .hero-image {
@@ -353,40 +414,100 @@ textarea:focus-visible {
   object-fit: cover;
 }
 
-.hero-overlay {
+.px {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgb(0 0 0 / 0.1) 0%, rgb(0 0 0 / 0.25) 40%, rgb(0 0 0 / 0.72) 100%);
+  display: block;
+  width: var(--px);
+  height: var(--px);
+}
+
+.px-top-right {
+  top: 0;
+  right: 0;
+  background: var(--jic-blue);
+}
+
+.px-top-right-2 {
+  top: var(--px);
+  right: var(--px);
+  background: var(--jic-pink);
+}
+
+/* Plocha pro text složená z pixelů; výšku přichytává JS na násobek --px. */
+.hero-plate {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: calc(4 * var(--px));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--jic-yellow);
+}
+
+.px-step-1 {
+  left: 0;
+  bottom: 100%;
+  background: var(--jic-yellow);
+}
+
+.px-step-2 {
+  left: calc(3 * var(--px));
+  bottom: 100%;
+  background: var(--jic-green);
+}
+
+.px-side {
+  left: 100%;
+  bottom: 0;
+  background: var(--jic-coral);
 }
 
 .hero-content {
-  position: relative;
-  width: 100%;
+  padding: clamp(20px, 2.6vw, 36px);
 }
 
+/* Nadtitulek: GT America Regular */
 .hero-kicker {
-  margin: 0 0 8px;
-  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--accent);
+  margin: 0 0 6px;
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.2rem);
 }
 
+/* Název sub-brandu ve dvou řádcích: JBC tučně, doplněk v display písmu. */
 .hero h1 {
-  font-size: clamp(3rem, 2rem + 6vw, 6.5rem);
-  letter-spacing: -0.03em;
-  margin: 0 0 16px;
-  text-shadow: 0 2px 24px rgb(0 0 0 / 0.35);
+  margin: 0 0 14px;
+}
+
+.hero-name {
+  display: block;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(3.5rem, 2.4rem + 4.4vw, 6.5rem);
+  line-height: 1.1;
+}
+
+.hero-name-2 {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem);
+  line-height: 1.2;
 }
 
 .hero-date {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0 0 28px;
-  font-size: clamp(1.15rem, 1rem + 0.8vw, 1.6rem);
-  font-weight: 600;
+  margin: 0 0 18px;
+  font-weight: 500;
+  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
+}
+
+@media (max-width: 560px) {
+  .hero-plate {
+    width: 100%;
+  }
+
+  .px-side {
+    display: none;
+  }
 }
 
 /* ==========================================================================
@@ -402,34 +523,28 @@ textarea:focus-visible {
 
 .about-grid p {
   max-width: 62ch;
-  font-size: 1.075rem;
 }
 
 .facts {
   display: grid;
-  gap: 12px;
+  gap: 8px;
   margin: 0;
 }
 
 .fact {
   padding: 16px 20px;
-  border-radius: var(--radius);
-  background: var(--bg);
-  border: 1px solid var(--line);
+  background: var(--white);
 }
 
 .fact dt {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
+  font-size: 0.95rem;
 }
 
 .fact dd {
   margin: 2px 0 0;
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 /* ==========================================================================
@@ -448,53 +563,50 @@ textarea:focus-visible {
 }
 
 .registration-list-wrap {
-  padding: 24px;
-  border-radius: var(--radius);
-  background: var(--surface);
-  border: 1px solid var(--line);
-}
-
-.registration-list-wrap h3 {
-  font-size: 1.35rem;
+  padding: 28px;
+  border: 2px solid var(--jic-lilac);
 }
 
 .reg-summary {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
 }
 
-.reg-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
+.reg-group + .reg-group {
+  margin-top: 20px;
 }
 
-.reg-column h4 {
+.reg-group h4 {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin: 0 0 8px;
-  font-size: 1rem;
+  gap: 10px;
+  margin: 0 0 10px;
 }
 
-.reg-column .count {
+.count {
   display: inline-grid;
   place-items: center;
-  min-width: 26px;
-  height: 26px;
+  min-width: 28px;
+  height: 28px;
   padding: 0 6px;
-  border-radius: 999px;
-  background: var(--brand);
-  color: var(--brand-ink);
-  font-size: 0.85rem;
+  background: var(--jic-purple);
+  color: var(--white);
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
-.reg-column ol {
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
   margin: 0;
-  padding-left: 1.6em;
+  padding: 0;
+  list-style: none;
 }
 
-.reg-column li {
-  padding: 3px 0;
+.chips li {
+  padding: 5px 12px;
+  background: var(--jic-lilac);
+  line-height: 1.4;
 }
 
 @media (max-width: 800px) {
@@ -508,15 +620,19 @@ textarea:focus-visible {
   }
 }
 
-@media (max-width: 380px) {
-  .reg-columns {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* ==========================================================================
-   Galerie
+   Galerie (fotky bez masky, jeden akcentní čtverec u nadpisu)
    ========================================================================== */
+
+.gallery h2::after {
+  content: '';
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-left: 0.35em;
+  background: var(--jic-pink);
+  vertical-align: baseline;
+}
 
 .gallery-grid {
   display: grid;
@@ -532,9 +648,9 @@ textarea:focus-visible {
   width: 100%;
   padding: 0;
   border: 0;
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   overflow: hidden;
-  background: var(--surface-2);
+  background: var(--white);
   cursor: zoom-in;
   aspect-ratio: 4 / 3;
 }
@@ -560,14 +676,14 @@ textarea:focus-visible {
   margin: 0;
   padding: 0;
   border: 0;
-  background: #080a09;
-  color: #fff;
+  background: var(--white);
+  color: var(--jic-purple);
   touch-action: pinch-zoom;
   overscroll-behavior: contain;
 }
 
 .lightbox::backdrop {
-  background: rgb(0 0 0 / 0.8);
+  background: var(--jic-lilac);
 }
 
 .lightbox-figure {
@@ -578,7 +694,7 @@ textarea:focus-visible {
   gap: 12px;
   height: 100%;
   margin: 0;
-  padding: 56px 16px 24px;
+  padding: 64px 16px 24px;
 }
 
 .lightbox-img {
@@ -592,27 +708,28 @@ textarea:focus-visible {
 }
 
 .lightbox-caption {
-  font-size: 0.9rem;
-  opacity: 0.8;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .lb-btn {
   position: absolute;
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
-  border: 0;
-  border-radius: 999px;
-  background: rgb(255 255 255 / 0.12);
-  color: #fff;
+  width: 52px;
+  height: 52px;
+  border: 2px solid var(--jic-purple);
+  border-radius: 0;
+  background: var(--jic-purple);
+  color: var(--white);
   font-size: 2rem;
   line-height: 1;
   cursor: pointer;
 }
 
 .lb-btn:hover {
-  background: rgb(255 255 255 / 0.24);
+  background: var(--white);
+  color: var(--jic-purple);
 }
 
 .lb-prev,
@@ -630,8 +747,8 @@ textarea:focus-visible {
 }
 
 .lb-close {
-  top: 8px;
-  right: 8px;
+  top: 0;
+  right: 0;
 }
 
 @media (max-width: 640px) {
@@ -643,7 +760,7 @@ textarea:focus-visible {
   }
 
   .lightbox-figure {
-    padding-bottom: 72px;
+    padding-bottom: 80px;
   }
 }
 
@@ -655,11 +772,9 @@ textarea:focus-visible {
   position: relative; /* drží uvnitř i absolutně umístěné .sr-only prvky */
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--surface);
-  /* Tabulka nepřetéká přes okraj stránky, posouvá se uvnitř. */
   max-width: 100%;
+  border: 2px solid var(--jic-purple);
+  background: var(--white);
 }
 
 .history-table {
@@ -667,13 +782,13 @@ textarea:focus-visible {
   border-spacing: 0;
   width: 100%;
   font-variant-numeric: tabular-nums;
-  font-size: 0.95rem;
+  font-size: 0.975rem;
 }
 
 .history-table th,
 .history-table td {
   padding: 0;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--jic-lilac);
   text-align: center;
   white-space: nowrap;
 }
@@ -683,14 +798,16 @@ textarea:focus-visible {
 }
 
 .history-table tbody tr:hover > * {
-  background-color: var(--surface-2);
+  background-color: var(--jic-lilac);
 }
 
-/* Hlavička: celá buňka je tlačítko pro řazení. */
+/* Záhlaví fialové s bílým textem; celá buňka je tlačítko pro řazení. */
 .history-table thead th {
-  background: var(--surface-2);
-  font-weight: 600;
+  background: var(--jic-purple);
+  color: var(--white);
+  font-weight: 700;
   vertical-align: bottom;
+  border-bottom: 0;
 }
 
 .history-table thead button {
@@ -702,15 +819,19 @@ textarea:focus-visible {
   justify-content: flex-end;
   gap: 2px;
   width: 100%;
-  min-height: 56px;
+  min-height: 60px;
   padding: 10px 10px 8px;
   cursor: pointer;
-  position: relative;
+}
+
+.history-table thead button:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .history-table thead button:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: -3px;
+  outline: 3px solid var(--white);
+  outline-offset: -5px;
 }
 
 .history-table thead .col-name button {
@@ -718,9 +839,8 @@ textarea:focus-visible {
 }
 
 .history-table .teams {
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 400;
-  color: var(--muted);
 }
 
 .sort-icon {
@@ -741,55 +861,43 @@ th[aria-sort='descending'] .sort-icon {
   opacity: 1;
 }
 
-th[aria-sort='ascending'],
-th[aria-sort='descending'] {
-  color: var(--brand);
-}
-
-@media (prefers-color-scheme: dark) {
-  th[aria-sort='ascending'],
-  th[aria-sort='descending'] {
-    color: var(--accent);
-  }
-}
-
 /* Fixní sloupec se jménem. */
 .history-table .col-name {
   position: sticky;
   left: 0;
   z-index: 1;
   text-align: left;
-  background: var(--surface);
-  border-right: 1px solid var(--line);
+  background: var(--white);
+  border-right: 2px solid var(--jic-lilac);
 }
 
 .history-table thead .col-name {
   z-index: 2;
-  background: var(--surface-2);
+  background: var(--jic-purple);
+  border-right-color: var(--jic-purple);
 }
 
 .history-table tbody .col-name {
-  padding: 8px 12px;
+  padding: 8px 14px;
   font-weight: 500;
 }
 
 .history-table td.col-num {
-  padding: 8px 12px;
+  padding: 8px 14px;
 }
 
-/* Heatmapa jako v Excelu: barva buňky, tmavý text v obou režimech. */
+/* Heatmapy: bílá → modrá (účasti), bílá → zelená (úspěšnost). */
 .history-table td.heat {
-  background: var(--heat, transparent);
-  color: #1b1f1d;
-  font-weight: 600;
+  background: var(--heat, var(--white));
+  font-weight: 700;
 }
 
 .history-table tbody tr:hover > td.heat {
-  background: var(--heat, var(--surface-2));
+  background: var(--heat, var(--jic-lilac));
 }
 
 .history-table .col-year {
-  min-width: 64px;
+  min-width: 66px;
 }
 
 .place {
@@ -798,47 +906,46 @@ th[aria-sort='descending'] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 40px;
+  min-width: 42px;
   min-height: 36px;
   margin: 4px;
   padding: 0 8px;
-  border-radius: 999px;
+  border-radius: 0;
   cursor: pointer;
   font-weight: 500;
 }
 
 .place:hover {
-  background: var(--line);
+  background: var(--jic-lilac);
+  outline: 2px solid var(--jic-purple);
+  outline-offset: -2px;
 }
 
 .place:focus-visible {
-  outline: 3px solid var(--focus);
+  outline: 3px solid var(--jic-purple);
   outline-offset: 1px;
 }
 
+/* Medaile tučně a velké: 3. místo (korálová) splní WCAG jen jako velký tučný text. */
 .place.medal {
-  color: var(--medal-ink);
   font-weight: 700;
+  font-size: 1.1875rem;
 }
 
 .place.medal-1 {
-  background: var(--gold);
+  background: var(--jic-yellow);
 }
 
 .place.medal-2 {
-  background: var(--silver);
+  background: var(--jic-lilac);
 }
 
 .place.medal-3 {
-  background: var(--bronze);
-}
-
-.place.medal:hover {
-  filter: brightness(0.94);
+  background: var(--jic-coral);
 }
 
 .history-note {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   margin-top: 12px;
 }
 
@@ -850,22 +957,20 @@ th[aria-sort='descending'] {
   gap: 2px;
   max-width: min(320px, calc(100vw - 16px));
   padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  background: var(--ink);
-  color: var(--bg);
-  box-shadow: var(--shadow);
-  font-size: 0.9rem;
+  border-radius: 0;
+  background: var(--jic-purple);
+  color: var(--white);
+  font-size: 0.95rem;
   pointer-events: none;
 }
 
-.place-popover .muted {
-  color: inherit;
-  opacity: 0.75;
+.place-popover[hidden] {
+  display: none;
 }
 
 @media (max-width: 640px) {
   .history-table {
-    font-size: 0.875rem;
+    font-size: 0.9rem;
   }
 
   .history-table tbody .col-name {
@@ -885,10 +990,42 @@ th[aria-sort='descending'] {
   }
 
   .history-table .col-year {
-    min-width: 56px;
+    min-width: 58px;
   }
 }
 
-.place-popover[hidden] {
-  display: none;
+/* ==========================================================================
+   Patička s logem JIC
+   ========================================================================== */
+
+.site-footer {
+  position: relative;
+  padding: 40px 0;
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.footer-brand {
+  display: inline-block;
+  /* ochranná zóna kolem loga (≈ výška písmene C z loga) */
+  padding: 12px;
+  text-decoration: none;
+}
+
+.footer-logo {
+  display: block;
+  height: 40px;
+  width: auto;
+}
+
+.footer-logo-text {
+  font-weight: 700;
+  font-size: 1.75rem;
+  line-height: 1;
 }

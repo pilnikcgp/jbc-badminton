@@ -20,6 +20,7 @@ Web je neveřejný: `<meta name="robots" content="noindex">` a hlavička
 6. [Nasazení na Netlify](#6-nasazení-na-netlify)
 7. [Historická data](#7-historická-data)
 8. [Struktura databáze](#8-struktura-databáze)
+9. [Vizuál (identita JIC)](#vizuál-identita-jic)
 
 ---
 
@@ -146,9 +147,30 @@ v databázi chybí.
 ### Hero fotka
 
 Nahraďte `public/hero.jpg` (na šířku, ideálně cca 2400 px a do 400 kB, např.
-přes [squoosh.app](https://squoosh.app)). Text přes fotku je ve spodní části,
-takže se hodí fotka s klidnější spodní třetinou. Popis pro čtečky obrazovky:
-`hero.imageAlt` v `src/config.ts`.
+přes [squoosh.app](https://squoosh.app)). Podle manuálu JIC: autentický moment,
+vždy s lidmi, pozitivní emoce, lidé blízko u sebe, žádné prázdné sportoviště.
+Pixelová maska zakrývá levý dolní roh (plocha s názvem) a pravý horní roh,
+takže obličeje a to podstatné mají být spíš uprostřed a vpravo. Popis pro
+čtečky obrazovky: `hero.imageAlt` v `src/config.ts`.
+
+## Vizuál (identita JIC)
+
+Vzhled vychází z *Design manuálu JIC 2.0*. Pravidla jsou v `src/styles.css`
+(tokeny na začátku souboru):
+
+- Fialová `#640ABA` pro texty, tlačítka a logo; lila, modrá, zelená, žlutá,
+  korálová a růžová jen jako pozadí. Bílý text jen na fialové.
+- Sekce střídají bílou a lila; oddělovače a hero tvoří čtverce pixelové mřížky
+  (5 čtverců na kratší stranu hero). Ostré rohy, žádné stíny, jen světlý režim.
+- **Písma:** zatím volné náhrady z Google Fonts – Archivo za GT America,
+  Fraunces za GT Super Display. Po potvrzení webové licence brandových písem
+  přidejte jejich `@font-face` (soubory `.woff2` do `public/fonts/`) a upravte
+  proměnné `--font-sans` a `--font-display` v `src/styles.css`; odkaz na Google
+  Fonts v `index.html` pak smažte.
+- **Logo JIC v patičce:** soubor z brand kitu (složka `02_Logo`, ideálně SVG)
+  uložte do `public/brand/` a v `src/config.ts` nastavte `footer.logo`, např.
+  `'/brand/jic-logo.svg'`. Dokud tam logo není, zobrazí se textový odkaz „JIC“.
+  Logo se nesmí deformovat ani přebarvovat.
 
 ## 6. Nasazení na Netlify
 

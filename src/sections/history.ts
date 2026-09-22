@@ -1,5 +1,5 @@
 import { fetchHistory, type EditionSummary } from '../lib/api';
-import { colorScale } from '../lib/colorScale';
+import { heatScale } from '../lib/colorScale';
 import { compareCs, escapeHtml, formatPercent, plural } from '../lib/format';
 import { site } from '../config';
 
@@ -51,8 +51,11 @@ export async function initHistory(root: HTMLElement) {
     return;
   }
 
-  const partColor = colorScale(rows.map((r) => r.participations));
-  const succColor = colorScale(rows.flatMap((r) => (r.success === null ? [] : [r.success])));
+  const partColor = heatScale(rows.map((r) => r.participations), '#88C9FF');
+  const succColor = heatScale(
+    rows.flatMap((r) => (r.success === null ? [] : [r.success])),
+    '#80D888',
+  );
 
   let sort: SortState = { key: 'name', dir: 1 };
 

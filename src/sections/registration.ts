@@ -154,16 +154,16 @@ function renderList(el: HTMLElement, regs: PublicRegistration[]) {
   const summary =
     `Přihlášeno <strong>${men.length} ${plural(men.length, 'hráč', 'hráči', 'hráčů')}</strong>` +
     ` a <strong>${women.length} ${plural(women.length, 'hráčka', 'hráčky', 'hráček')}</strong>.`;
-  const list = (title: string, items: PublicRegistration[]) => `
-    <div class="reg-column">
+  const group = (title: string, items: PublicRegistration[]) => `
+    <div class="reg-group">
       <h4>${title} <span class="count">${items.length}</span></h4>
       ${
         items.length
-          ? `<ol>${items.map((r) => `<li>${escapeHtml(r.full_name)}</li>`).join('')}</ol>`
-          : `<p class="muted">Zatím nikdo.</p>`
+          ? `<ul class="chips">${items.map((r) => `<li>${escapeHtml(r.full_name)}</li>`).join('')}</ul>`
+          : `<p>Zatím nikdo.</p>`
       }
     </div>`;
   el.innerHTML = `
     <p class="reg-summary">${summary}</p>
-    <div class="reg-columns">${list('Hráčky', women)}${list('Hráči', men)}</div>`;
+    ${group('Hráčky', women)}${group('Hráči', men)}`;
 }

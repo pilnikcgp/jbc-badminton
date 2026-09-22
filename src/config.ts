@@ -5,14 +5,30 @@
 export const site = {
   /** Název akce – v hlavičce stránky i v záložce prohlížeče. */
   name: 'JBC',
-  /** Podtitul pod názvem v hero sekci. */
+  /** Nadtitulek nad názvem v hero sekci. */
   tagline: 'Turnaj ve smíšené čtyřhře',
 
   hero: {
-    /** Fotka přes celou šířku, soubor v public/. */
+    /** Fotka přes celou šířku, soubor v public/. Autentický moment s lidmi, ne prázdný kurt. */
     image: '/hero.jpg',
     imageAlt: 'Hráči na kurtu během minulého ročníku',
+    /**
+     * Druhý řádek názvu (první řádek je `name`). {year} se nahradí rokem
+     * aktuálního ročníku z databáze.
+     */
+    nameLine2: 'badmintonový turnaj {year}',
     cta: 'Přihlásit se',
+  },
+
+  footer: {
+    organizer: 'Pořádá JIC',
+    url: 'https://www.jic.cz',
+    /**
+     * Logo JIC z brand kitu (složka 02_Logo), např. '/brand/jic-logo.svg'.
+     * Dokud je null, zobrazí se textový odkaz. Logo nedeformovat ani nepřebarvovat.
+     */
+    logo: null as string | null,
+    logoAlt: 'JIC',
   },
 
   /** Zobrazí se, dokud v databázi není vyplněný termín / místo. */

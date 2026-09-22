@@ -5,26 +5,60 @@ import { site } from '../config';
 export const editionDate = (e: Edition | null) => (e?.date ? formatDate(e.date) : site.dateUnknown);
 export const editionVenue = (e: Edition | null) => e?.venue ?? site.venueUnknown;
 
+/**
+ * Hero s pixelovou maskou podle identity JIC: mřížka má 5 čtverců na kratší
+ * stranu, čtverce v barvách palety překrývají okraje fotky a text leží na
+ * ploše složené z pixelů (.hero-plate), nikdy přímo na fotce.
+ */
 export function initHero(root: HTMLElement, edition: Edition | null) {
-  const title = edition?.title ?? site.name;
+  const line2 = site.hero.nameLine2.replace('{year}', edition ? String(edition.year) : '').trim();
   root.innerHTML = `
     <img class="hero-image" src="${escapeHtml(site.hero.image)}" alt="${escapeHtml(site.hero.imageAlt)}"
          fetchpriority="high" decoding="async" />
-    <div class="hero-overlay"></div>
-    <div class="container hero-content">
-      <p class="hero-kicker">${escapeHtml(site.tagline)}</p>
-      <h1>${escapeHtml(title)}</h1>
-      <p class="hero-date">
-        <svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22"><path fill="currentColor" d="M7 2h2v2h6V2h2v2h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3V2Zm12 8H5v9h14v-9Z"/></svg>
-        <span>${escapeHtml(editionDate(edition))}</span>
-      </p>
-      <a class="btn btn-accent btn-lg" href="#registrace">${escapeHtml(site.hero.cta)}</a>
+    <div class="hero-pixels" aria-hidden="true">
+      <i class="px px-top-right"></i>
+      <i class="px px-top-right-2"></i>
+    </div>
+    <div class="hero-plate">
+      <i class="px px-step-1" aria-hidden="true"></i>
+      <i class="px px-step-2" aria-hidden="true"></i>
+      <i class="px px-side" aria-hidden="true"></i>
+      <div class="hero-content">
+        <p class="hero-kicker">${escapeHtml(site.tagline)}</p>
+        <h1>
+          <span class="hero-name">${escapeHtml(site.name)}</span>
+          ${line2 ? `<span class="hero-name-2">${escapeHtml(line2)}</span>` : ''}
+        </h1>
+        <p class="hero-date">${escapeHtml(editionDate(edition))}</p>
+        <a class="btn" href="#registrace">${escapeHtml(site.hero.cta)}</a>
+      </div>
     </div>`;
 
-  // Když fotka chybí, zůstane barevné pozadí sekce.
+  // Když fotka chybí, zůstane pastelové pozadí sekce.
   root.querySelector<HTMLImageElement>('.hero-image')!.addEventListener('error', (e) => {
     (e.target as HTMLElement).remove();
   });
+
+  snapPlateToGrid(root);
+}
+
+/** Výšku textové plochy zaokrouhlí nahoru na celý počet čtverců mřížky. */
+function snapPlateToGrid(root: HTMLElement) {
+  const plate = root.querySelector<HTMLElement>('.hero-plate')!;
+  const content = plate.querySelector<HTMLElement>('.hero-content')!;
+  const probe = plate.querySelector<HTMLElement>('.px-step-1')!;
+
+  const snap = () => {
+    const px = probe.getBoundingClientRect().width;
+    if (!px) return;
+    const rows = Math.max(1, Math.ceil(content.offsetHeight / px - 0.001));
+    plate.style.height = `${rows * px}px`;
+  };
+
+  new ResizeObserver(snap).observe(content);
+  window.addEventListener('resize', snap);
+  document.fonts?.ready.then(snap);
+  snap();
 }
 
 export function initAbout(root: HTMLElement, edition: Edition | null) {
@@ -44,5 +78,17 @@ export function initAbout(root: HTMLElement, edition: Edition | null) {
           .map((f) => `<div class="fact"><dt>${escapeHtml(f.label)}</dt><dd>${escapeHtml(f.value)}</dd></div>`)
           .join('')}
       </dl>
+    </div>`;
+}
+
+export function initFooter(root: HTMLElement) {
+  const f = site.footer;
+  const mark = f.logo
+    ? `<img src="${escapeHtml(f.logo)}" alt="${escapeHtml(f.logoAlt)}" class="footer-logo" />`
+    : `<span class="footer-logo-text">${escapeHtml(f.logoAlt)}</span>`;
+  root.innerHTML = `
+    <div class="container footer-inner">
+      <span>${escapeHtml(f.organizer)}</span>
+      <a class="footer-brand" href="${escapeHtml(f.url)}" rel="noopener">${mark}<span class="sr-only"> – jic.cz</span></a>
     </div>`;
 }
