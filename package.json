@@ -1,0 +1,12 @@
+{
+  "name": "jbc-badminton",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "import:history": "node scripts/import-history.mjs"
+  },
+  "devDependencies": {
+    "exceljs": "^4.4.0"
+  }
+}
