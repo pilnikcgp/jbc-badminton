@@ -149,8 +149,12 @@ v databázi chybí.
 Nahraďte `public/hero.jpg` (na šířku, ideálně cca 2400 px a do 400 kB, např.
 přes [squoosh.app](https://squoosh.app)). Podle manuálu JIC: autentický moment,
 vždy s lidmi, pozitivní emoce, lidé blízko u sebe, žádné prázdné sportoviště.
-Pixelová maska zakrývá levý dolní roh (plocha s názvem) a pravý horní roh,
-takže obličeje a to podstatné mají být spíš uprostřed a vpravo. Popis pro
+Plocha s názvem leží vedle fotky (desktop) nebo pod ní (mobil, tablet), takže
+fotka může být i skupinová přes celou šířku. Pixelové čtverce překrývají jen
+rohy fotky: na desktopu oba horní rohy, na mobilu oba dolní. V těch místech má
+být zeď nebo podlaha, ne obličeje. Při výměně fotky projděte hero na mobilu
+i na desktopu; případně upravte pozice čtverců (`.px-photo-*`, `.px-step-*`)
+a výřez (`object-position` u `.hero-image`) v `src/styles.css`. Popis pro
 čtečky obrazovky: `hero.imageAlt` v `src/config.ts`.
 
 ## Vizuál (identita JIC)

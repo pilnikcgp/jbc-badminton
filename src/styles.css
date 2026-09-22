@@ -388,12 +388,18 @@ textarea:focus-visible {
 
 /* ==========================================================================
    Hero: fotka s pixelovou maskou
+   Mřížka: 5 čtverců (--px) na kratší stranu hero. Fotka je skupinová a lidé
+   vyplňují celou šířku, proto plocha s názvem leží vedle fotky (desktop)
+   nebo pod ní (mobil) a čtverce přes fotku jsou jen v rozích se zdí/podlahou.
    ========================================================================== */
 
 .hero {
-  /* výška hero a velikost čtverce: 5 čtverců na kratší stranu */
-  --hero-h: max(520px, min(88vh, 760px));
-  --px: calc(min(100vw, var(--hero-h)) / 5);
+  /* výšku omezuje i šířka okna, aby fotka vedle plochy měla poměr ≥ ~1,4 : 1 */
+  --hero-h: max(560px, min(88vh, 760px, calc(100vw / 2.05)));
+  --px: calc(var(--hero-h) / 5);
+  /* šířka plochy s názvem: aspoň 2 čtverce a tolik, aby fotka nebyla
+     širší než cca 1,55 : 1 (jinak by ořez usekl hlavy) */
+  --plate-w: max(calc(2 * var(--px)), 320px);
   position: relative;
   height: var(--hero-h);
   overflow: hidden;
@@ -402,16 +408,31 @@ textarea:focus-visible {
 
 @supports (height: 1svh) {
   .hero {
-    --hero-h: max(520px, min(88svh, 760px));
+    --hero-h: max(560px, min(88svh, 760px, calc(100vw / 2.05)));
   }
 }
 
-.hero-image {
+@supports (width: round(up, 10px, 3px)) {
+  .hero {
+    --plate-w: round(up, max(calc(2 * var(--px)), 320px, calc(100vw - 1.55 * var(--hero-h))), var(--px));
+  }
+}
+
+.hero-photo {
   position: absolute;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: var(--plate-w);
+  background: var(--jic-lilac);
+}
+
+.hero-image {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 30%;
 }
 
 .px {
@@ -421,16 +442,18 @@ textarea:focus-visible {
   height: var(--px);
 }
 
-.px-top-right {
+/* pravý horní roh fotky: prázdná zeď */
+.px-photo-tr {
   top: 0;
   right: 0;
   background: var(--jic-blue);
 }
 
-.px-top-right-2 {
-  top: var(--px);
-  right: var(--px);
-  background: var(--jic-pink);
+/* levý horní roh fotky: zelená zeď */
+.px-photo-tl {
+  top: 0;
+  left: var(--plate-w);
+  background: var(--jic-green);
 }
 
 /* Plocha pro text složená z pixelů; výšku přichytává JS na násobek --px. */
@@ -438,7 +461,7 @@ textarea:focus-visible {
   position: absolute;
   left: 0;
   bottom: 0;
-  width: calc(4 * var(--px));
+  width: var(--plate-w);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -452,25 +475,19 @@ textarea:focus-visible {
 }
 
 .px-step-2 {
-  left: calc(3 * var(--px));
-  bottom: 100%;
-  background: var(--jic-green);
-}
-
-.px-side {
-  left: 100%;
-  bottom: 0;
-  background: var(--jic-coral);
+  left: var(--px);
+  bottom: calc(100% + var(--px));
+  background: var(--jic-pink);
 }
 
 .hero-content {
-  padding: clamp(20px, 2.6vw, 36px);
+  padding: clamp(20px, 2.4vw, 32px);
 }
 
 /* Nadtitulek: GT America Regular */
 .hero-kicker {
   margin: 0 0 6px;
-  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.2rem);
+  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.15rem);
 }
 
 /* Název sub-brandu ve dvou řádcích: JBC tučně, doplněk v display písmu. */
@@ -482,7 +499,7 @@ textarea:focus-visible {
   display: block;
   font-family: var(--font-sans);
   font-weight: 700;
-  font-size: clamp(3.5rem, 2.4rem + 4.4vw, 6.5rem);
+  font-size: clamp(3.5rem, 2.6rem + 3.2vw, 6rem);
   line-height: 1.1;
 }
 
@@ -490,23 +507,53 @@ textarea:focus-visible {
   display: block;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.5rem);
+  font-size: clamp(1.5rem, 1.2rem + 0.9vw, 2.1rem);
   line-height: 1.2;
 }
 
 .hero-date {
   margin: 0 0 18px;
   font-weight: 500;
-  font-size: clamp(1.1rem, 1rem + 0.5vw, 1.35rem);
+  font-size: clamp(1.1rem, 1rem + 0.4vw, 1.3rem);
 }
 
-@media (max-width: 560px) {
+/* Mobil a tablet: fotka nahoře přes celou šířku, plocha s názvem pod ní. */
+@media (max-width: 1099px) {
+  .hero {
+    --px: calc(100vw / 5);
+    height: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-photo {
+    position: relative;
+    inset: auto;
+    height: calc(3 * var(--px));
+  }
+
+  /* ořez jen zespodu (podlaha), ať hlavy zůstanou pod čtvercem vpravo nahoře */
+  .hero-image {
+    object-position: 50% 0%;
+  }
+
+  /* Na úzké fotce je nad hlavami málo zdi: horní čtverce by zakryly
+     obličeje, proto jsou čtverce jen v dolních rozích (podlaha a nohy). */
+  .px-photo-tl,
+  .px-photo-tr {
+    display: none;
+  }
+
   .hero-plate {
+    position: relative;
     width: 100%;
   }
 
-  .px-side {
-    display: none;
+  .px-step-2 {
+    left: auto;
+    right: 0;
+    bottom: 100%;
+    background: var(--jic-blue);
   }
 }
 

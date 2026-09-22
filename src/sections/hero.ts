@@ -7,22 +7,22 @@ export const editionVenue = (e: Edition | null) => e?.venue ?? site.venueUnknown
 
 /**
  * Hero s pixelovou maskou podle identity JIC: mřížka má 5 čtverců na kratší
- * stranu, čtverce v barvách palety překrývají okraje fotky a text leží na
- * ploše složené z pixelů (.hero-plate), nikdy přímo na fotce.
+ * stranu hero, text leží na ploše složené z pixelů (.hero-plate) vedle fotky
+ * (desktop) nebo pod ní (mobil), nikdy přímo na fotce. Čtverce přes fotku jen
+ * v rozích s prázdnou zdí či podlahou, aby nezakrývaly obličeje.
  */
 export function initHero(root: HTMLElement, edition: Edition | null) {
   const line2 = site.hero.nameLine2.replace('{year}', edition ? String(edition.year) : '').trim();
   root.innerHTML = `
-    <img class="hero-image" src="${escapeHtml(site.hero.image)}" alt="${escapeHtml(site.hero.imageAlt)}"
-         fetchpriority="high" decoding="async" />
-    <div class="hero-pixels" aria-hidden="true">
-      <i class="px px-top-right"></i>
-      <i class="px px-top-right-2"></i>
+    <div class="hero-photo">
+      <img class="hero-image" src="${escapeHtml(site.hero.image)}" alt="${escapeHtml(site.hero.imageAlt)}"
+           fetchpriority="high" decoding="async" />
     </div>
+    <i class="px px-photo-tr" aria-hidden="true"></i>
+    <i class="px px-photo-tl" aria-hidden="true"></i>
     <div class="hero-plate">
       <i class="px px-step-1" aria-hidden="true"></i>
       <i class="px px-step-2" aria-hidden="true"></i>
-      <i class="px px-side" aria-hidden="true"></i>
       <div class="hero-content">
         <p class="hero-kicker">${escapeHtml(site.tagline)}</p>
         <h1>
