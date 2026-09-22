@@ -47,3 +47,28 @@ npm run dev                     # http://localhost:5173
 3. *Site configuration → Environment variables*: přidejte `VITE_SUPABASE_URL`
    a `VITE_SUPABASE_ANON_KEY` (stejné hodnoty jako v `.env.local`).
 4. *Deploys → Trigger deploy*. Každý push do `main` se pak nasadí automaticky.
+
+## Fotky
+
+**Galerie:** originály vložte do složky `gallery-originals/` (není v gitu, fotky
+mohou být velké) a spusťte:
+
+```bash
+npm run gallery
+```
+
+Skript vytvoří WebP náhledy (`public/gallery/thumb/`, šířka 640 px) a plné
+velikosti (`public/gallery/full/`, max. 2000 px), otočí fotky podle EXIF, zahodí
+metadata včetně GPS a zapíše `public/gallery/manifest.json`. Pořadí v galerii
+je abecední podle názvu souboru. Popisky (volitelné) patří do
+`gallery-originals/popisky.json`, např. `{ "foto-01.jpg": "Finále 2026" }`.
+Smazaná fotka z `gallery-originals/` zmizí i z webu. Výstupy v `public/gallery/`
+commitněte. Zástupné fotky `foto-01` až `foto-08` jednoduše přepíšete nebo smažete.
+
+**Hero fotka:** nahraďte `public/hero.jpg` (ideálně na šířku, cca 2400 px,
+do 400 kB). Popis fotky pro čtečky je v `src/config.ts` (`hero.imageAlt`).
+
+## Texty
+
+Všechny texty stránky (název, podtitul, představení, hlášky formuláře, nadpisy)
+jsou v `src/config.ts`. Termín a místo se berou z tabulky `editions`.
