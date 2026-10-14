@@ -21,11 +21,18 @@ export function initTimeline(root: HTMLElement) {
         <span class="tl-text">
           <span class="tl-label">${escapeHtml(step.label)}</span>
           ${'note' in step && step.note ? `<span class="tl-note">${escapeHtml(step.note)}</span>` : ''}
-          ${state === 'current' ? `<span class="tl-badge">${escapeHtml(currentBadge)}</span>` : ''}
+          ${state === 'current' ? currentAction(step) : ''}
           <span class="sr-only">(${stateText})</span>
         </span>
       </li>`;
   });
+
+  function currentAction(step: (typeof steps)[number]) {
+    if ('cta' in step && step.cta) {
+      return `<a class="btn btn-sm" href="${escapeHtml(step.cta.href)}">${escapeHtml(step.cta.label)}</a>`;
+    }
+    return `<span class="tl-badge">${escapeHtml(currentBadge)}</span>`;
+  }
 
   root.innerHTML = `
     <div class="container">

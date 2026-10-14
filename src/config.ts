@@ -52,12 +52,19 @@ export const site = {
   timeline: {
     heading: 'Harmonogram',
     steps: [
-      { id: 'registration', label: 'Přihlašování', note: 'do 8. 1. 2027' },
+      {
+        id: 'registration',
+        label: 'Přihlašování',
+        note: 'do 8. 1. 2027',
+        /** Tlačítko u aktuálního kroku (nepovinné). */
+        cta: { label: 'Přihlásit se', href: '#registrace' },
+      },
       { id: 'date', label: 'Výběr termínu' },
       { id: 'format', label: 'Výběr formátu turnaje' },
       { id: 'tournament', label: 'Turnaj' },
     ],
     current: 'registration',
+    /** Štítek u aktuálního kroku, který nemá vlastní tlačítko (cta). */
     currentBadge: 'Právě teď',
   },
 

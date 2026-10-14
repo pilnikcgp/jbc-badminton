@@ -264,6 +264,12 @@ strong {
   color: var(--jic-purple);
 }
 
+.btn-sm {
+  min-height: 44px; /* dost velký cíl pro prst */
+  padding: 0 18px;
+  font-size: 1rem;
+}
+
 .btn:disabled {
   opacity: 0.6;
   cursor: progress;
@@ -818,6 +824,10 @@ textarea:focus-visible {
 
 .is-done .tl-label {
   font-weight: 500;
+}
+
+.tl-text .btn {
+  margin-top: 4px;
 }
 
 .tl-note {
