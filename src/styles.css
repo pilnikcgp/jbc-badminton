@@ -141,6 +141,11 @@ strong {
   font-weight: 400;
 }
 
+/* [hidden] musí vyhrát i nad display: flex/grid z komponent */
+[hidden] {
+  display: none !important;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;

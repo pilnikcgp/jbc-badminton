@@ -33,6 +33,12 @@ Web je neveřejný: `<meta name="robots" content="noindex">` a hlavička
    Vytvoří tabulky, pohledy, RLS a funkci `register()`. Pak stejně spusťte
    další migrace ze složky `supabase/migrations/` v pořadí podle názvu
    (`20261014120000_format_poll.sql` přidává anketu o formátu turnaje).
+
+   Web je s migrací ankety kompatibilní v obou stavech: dokud v databázi
+   není pohled `format_poll_results`, otázku na formát i graf skryje
+   a registruje bez formátu; po migraci je zapne sám (stačí obnovit stránku).
+   Pohled `format_poll_results` (stejně jako `registrations_public`) běží
+   záměrně s právy vlastníka – nepřepínejte ho na `security_invoker`.
 3. Nový dotaz → vložte celý `supabase/seed.sql` → **Run**. Nahraje ročníky
    2022–2026, hráče a páry. Na konci sám ověří počty účastí a úspěšnosti proti
    Excelu; při neshodě skončí chybou a nic neuloží. Výsledek „Success. No rows

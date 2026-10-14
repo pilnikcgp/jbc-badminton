@@ -81,6 +81,8 @@ export const site = {
     ],
     pollHeading: 'Průběžný výsledek ankety o formátu',
     pollEmpty: 'Zatím nikdo nehlasoval.',
+    /** Když se anketa zapne, zatímco má někdo otevřený starší formulář. */
+    formatNowRequired: 'Doplňte prosím ještě preferovaný formát turnaje a odešlete znovu.',
     listEmpty: 'Zatím nikdo. Buďte první!',
   },
 

@@ -28,7 +28,7 @@ export function initRegistration(root: HTMLElement, edition: Edition | null) {
       <div class="registration-list-wrap">
         <h3>${escapeHtml(t.listHeading)}</h3>
         <div class="registration-list"><p class="muted">Načítám…</p></div>
-        <div class="poll">
+        <div class="poll" hidden>
           <h3>${escapeHtml(t.pollHeading)}</h3>
           <div class="poll-body"><p class="muted">Načítám…</p></div>
         </div>
@@ -36,7 +36,23 @@ export function initRegistration(root: HTMLElement, edition: Edition | null) {
     </div>`;
 
   const listEl = root.querySelector<HTMLElement>('.registration-list')!;
+  const pollWrap = root.querySelector<HTMLElement>('.poll')!;
   const pollEl = root.querySelector<HTMLElement>('.poll-body')!;
+  const formatField = root.querySelector<HTMLFieldSetElement>('.format-field');
+
+  // Anketa se zapne, až když ji databáze má (pohled format_poll_results).
+  // Do té doby je otázka skrytá a vypnutá a registrace běží bez formátu,
+  // takže web funguje před migrací i po ní.
+  let pollAvailable = false;
+  const setPollAvailable = (on: boolean) => {
+    pollAvailable = on;
+    pollWrap.hidden = !on;
+    if (formatField) {
+      formatField.hidden = !on;
+      formatField.disabled = !on;
+    }
+  };
+
   const refreshList = async () => {
     try {
       renderList(listEl, await fetchRegistrations());
@@ -45,22 +61,34 @@ export function initRegistration(root: HTMLElement, edition: Edition | null) {
       listEl.innerHTML = `<p class="notice notice-error">Seznam se nepodařilo načíst.</p>`;
     }
   };
-  const refreshPoll = async () => {
+  const refreshPoll = async (): Promise<boolean> => {
     try {
-      renderPoll(pollEl, await fetchPollResults());
+      const results = await fetchPollResults();
+      setPollAvailable(results !== null);
+      if (results) renderPoll(pollEl, results);
     } catch (err) {
       console.error(err);
+      setPollAvailable(true);
       pollEl.innerHTML = `<p class="notice notice-error">Výsledek ankety se nepodařilo načíst.</p>`;
     }
+    return pollAvailable;
   };
   // Seznam i anketa se načítají a po registraci obnovují spolu.
   const refreshAll = async () => {
     await Promise.all([refreshList(), refreshPoll()]);
   };
-  refreshAll();
+  const pollReady = refreshPoll();
+  refreshList();
 
   const form = root.querySelector<HTMLFormElement>('form');
-  if (form) bindForm(form, refreshAll);
+  if (form) {
+    bindForm(form, {
+      onSuccess: refreshAll,
+      pollReady,
+      refreshPoll,
+      isPollAvailable: () => pollAvailable,
+    });
+  }
 }
 
 function formHtml() {
@@ -84,7 +112,7 @@ function formHtml() {
         </div>
         <small class="muted">Kvůli losu smíšené čtyřhry.</small>
       </fieldset>
-      <fieldset class="field">
+      <fieldset class="field format-field" hidden disabled>
         <legend>${escapeHtml(t.formatQuestion)}</legend>
         <div class="choices">
           ${t.formats
@@ -109,7 +137,15 @@ function formHtml() {
     </form>`;
 }
 
-function bindForm(form: HTMLFormElement, onSuccess: () => Promise<void>) {
+interface FormContext {
+  onSuccess: () => Promise<void>;
+  /** Úvodní zjištění, zda databáze má anketu. */
+  pollReady: Promise<boolean>;
+  refreshPoll: () => Promise<boolean>;
+  isPollAvailable: () => boolean;
+}
+
+function bindForm(form: HTMLFormElement, ctx: FormContext) {
   const message = form.querySelector<HTMLElement>('.form-message')!;
   const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
 
@@ -122,6 +158,17 @@ function bindForm(form: HTMLFormElement, onSuccess: () => Promise<void>) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     message.hidden = true;
+    await ctx.pollReady; // otázka na formát musí být zapnutá/vypnutá před kontrolou
+    // Formulář bez ankety si před odesláním ověří, zda ji databáze mezitím
+    // nedostala (migrace při otevřené stránce). Pokud ano, nejdřív ukáže
+    // otázku na formát a registraci zatím neodešle.
+    if (!ctx.isPollAvailable() && (await ctx.refreshPoll())) {
+      form.classList.add('was-validated');
+      show(t.formatNowRequired, 'error');
+      form.querySelector<HTMLInputElement>('input[name="format"]')?.focus();
+      return;
+    }
+    const withFormat = ctx.isPollAvailable();
 
     if (!form.checkValidity()) {
       form.classList.add('was-validated');
@@ -140,7 +187,7 @@ function bindForm(form: HTMLFormElement, onSuccess: () => Promise<void>) {
         fullName: String(data.get('fullName') ?? ''),
         email: String(data.get('email') ?? ''),
         gender: data.get('gender') as Gender,
-        format: data.get('format') as TournamentFormat,
+        format: withFormat ? (data.get('format') as TournamentFormat) : null,
         note: String(data.get('note') ?? ''),
         website: String(data.get('website') ?? ''),
       });
@@ -157,13 +204,21 @@ function bindForm(form: HTMLFormElement, onSuccess: () => Promise<void>) {
         form.reset();
         form.classList.remove('was-validated');
         show(t.success, 'ok');
-        await onSuccess();
+        await ctx.onSuccess();
         break;
       case 'duplicate_email':
         show(t.duplicate, 'error');
         form.querySelector<HTMLInputElement>('#reg-email')?.focus();
         break;
       case 'invalid':
+        // Formulář bez otázky na formát, ale databáze mezitím dostala anketu
+        // (migrace proběhla, zatímco byla stránka otevřená): ukážeme otázku.
+        if (!withFormat && (await ctx.refreshPoll())) {
+          form.classList.add('was-validated');
+          show(t.formatNowRequired, 'error');
+          form.querySelector<HTMLInputElement>('input[name="format"]')?.focus();
+          break;
+        }
         show(t.invalid, 'error');
         break;
       case 'registration_closed':

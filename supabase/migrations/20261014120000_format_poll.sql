@@ -121,8 +121,15 @@ create policy registrations_insert_open on public.registrations
 -- 4. Souhrnný výsledek ankety pro aktuální ročník
 -- ---------------------------------------------------------------------------
 -- Vždy všechny čtyři možnosti (i s nulou hlasů), v pořadí enumu.
--- ZÁMĚRNĚ bez security_invoker (stejně jako registrations_public): pohled čte
--- registrations s právy vlastníka, ale ven pouští jen součty.
+--
+-- POZOR: pohled ZÁMĚRNĚ běží s právy vlastníka (bez security_invoker), stejně
+-- jako registrations_public. Čte tabulku registrations, kterou anonym číst
+-- nesmí, a ven pouští jen součty hlasů. NESMÍ se přepnout na
+-- security_invoker = true: dotaz by se pak vyhodnocoval s právy anonyma
+-- a anketa by se přestala načítat (permission denied for table registrations).
+-- Kdyby se to někdo snažil „opravit“ přidáním SELECT na registrations,
+-- RLS (bez politiky pro čtení) anonymovi nevrátí žádné řádky a anketa
+-- ukáže samé nuly. Obojí ověřeno testem.
 
 create view public.format_poll_results as
 select
@@ -137,6 +144,8 @@ group by o.format, o.position
 order by o.position;
 
 comment on view public.format_poll_results is
-  'Anketa o formátu: počet hlasů pro každou možnost v aktuálním ročníku (nejvyšší year).';
+  'Anketa o formátu: počet hlasů pro každou možnost v aktuálním ročníku (nejvyšší year). '
+  'Záměrně běží s právy vlastníka: NEPŘEPÍNAT na security_invoker, jinak se anketa nenačte '
+  '(anonym nesmí číst registrations), a po přidání práv by ukazovala samé nuly.';
 
 grant select on public.format_poll_results to anon, authenticated;

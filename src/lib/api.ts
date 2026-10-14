@@ -91,9 +91,15 @@ export async function fetchRegistrations(): Promise<PublicRegistration[]> {
   return unwrap(res) as PublicRegistration[];
 }
 
-/** Souhrn ankety pro aktuální ročník: počty hlasů, žádné volby jednotlivců. */
-export async function fetchPollResults(): Promise<PollResult[]> {
+/**
+ * Souhrn ankety pro aktuální ročník: počty hlasů, žádné volby jednotlivců.
+ * Vrací null, když databáze anketu ještě nemá (migrace 20261014120000 zatím
+ * neproběhla) – frontend pak otázku i graf skryje a registruje postaru.
+ */
+export async function fetchPollResults(): Promise<PollResult[] | null> {
   const res = await supabase.from('format_poll_results').select('*').order('position');
+  // PGRST205 = PostgREST pohled nezná, 42P01 = relace neexistuje
+  if (res.error && ['PGRST205', '42P01'].includes(res.error.code)) return null;
   return unwrap(res) as PollResult[];
 }
 
@@ -101,7 +107,8 @@ export async function register(input: {
   fullName: string;
   email: string;
   gender: Gender;
-  format: TournamentFormat;
+  /** null = databáze ještě nemá anketu, parametr se neposílá. */
+  format: TournamentFormat | null;
   note: string;
   website: string;
 }): Promise<RegisterResult> {
@@ -109,7 +116,7 @@ export async function register(input: {
     p_full_name: input.fullName,
     p_email: input.email,
     p_gender: input.gender,
-    p_format: input.format,
+    ...(input.format ? { p_format: input.format } : {}),
     p_note: input.note,
     p_website: input.website,
   });
