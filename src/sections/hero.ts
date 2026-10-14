@@ -37,7 +37,18 @@ export function initHero(root: HTMLElement, edition: Edition | null) {
     (e.target as HTMLElement).remove();
   });
 
+  trackPageWidth(root);
   snapPlateToGrid(root);
+}
+
+/**
+ * Šířka stránky bez posuvníku do --page-w, aby levý okraj textu v hero seděl
+ * přesně s .container ostatních sekcí (100vw na Windows zahrnuje posuvník).
+ */
+function trackPageWidth(root: HTMLElement) {
+  const update = () => root.style.setProperty('--page-w', `${root.clientWidth}px`);
+  new ResizeObserver(update).observe(root);
+  update();
 }
 
 /** Výšku textové plochy zaokrouhlí nahoru na celý počet čtverců mřížky. */

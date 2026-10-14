@@ -110,7 +110,6 @@ function formHtml() {
           <label><input type="radio" name="gender" value="female" required /><span>Hráčka</span></label>
           <label><input type="radio" name="gender" value="male" /><span>Hráč</span></label>
         </div>
-        <small class="muted">Kvůli losu smíšené čtyřhry.</small>
       </fieldset>
       <fieldset class="field format-field" hidden disabled>
         <legend>${escapeHtml(t.formatQuestion)}</legend>

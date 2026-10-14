@@ -483,12 +483,17 @@ textarea:focus-visible {
    ========================================================================== */
 
 .hero {
+  /* --page-w = šířka stránky bez posuvníku; nastavuje ji JS (hero.ts),
+     100vw je jen záloha (na Windows obsahuje i posuvník). */
+  --page-w: 100vw;
+  /* levý okraj textu = levý okraj obsahu .container v ostatních sekcích */
+  --content-left: max(var(--gutter), calc((var(--page-w) - var(--container)) / 2 + var(--gutter)));
   /* výšku omezuje i šířka okna, aby fotka vedle plochy měla poměr ≥ ~1,4 : 1 */
-  --hero-h: max(560px, min(88vh, 760px, calc(100vw / 2.05)));
+  --hero-h: max(560px, min(88vh, 760px, calc(var(--page-w) / 2.05)));
   --px: calc(var(--hero-h) / 5);
-  /* šířka plochy s názvem: aspoň 2 čtverce a tolik, aby fotka nebyla
-     širší než cca 1,55 : 1 (jinak by ořez usekl hlavy) */
-  --plate-w: max(calc(2 * var(--px)), 320px);
+  /* šířka plochy s názvem: aspoň 2 čtverce, aspoň odsazení textu + 300 px
+     na text a tolik, aby fotka nebyla širší než cca 1,55 : 1 */
+  --plate-w: max(calc(2 * var(--px)), 320px, calc(var(--content-left) + 300px));
   position: relative;
   height: var(--hero-h);
   overflow: hidden;
@@ -497,13 +502,22 @@ textarea:focus-visible {
 
 @supports (height: 1svh) {
   .hero {
-    --hero-h: max(560px, min(88svh, 760px, calc(100vw / 2.05)));
+    --hero-h: max(560px, min(88svh, 760px, calc(var(--page-w) / 2.05)));
   }
 }
 
 @supports (width: round(up, 10px, 3px)) {
   .hero {
-    --plate-w: round(up, max(calc(2 * var(--px)), 320px, calc(100vw - 1.55 * var(--hero-h))), var(--px));
+    --plate-w: round(
+      up,
+      max(
+        calc(2 * var(--px)),
+        320px,
+        calc(var(--content-left) + 300px),
+        calc(var(--page-w) - 1.55 * var(--hero-h))
+      ),
+      var(--px)
+    );
   }
 }
 
@@ -569,8 +583,9 @@ textarea:focus-visible {
   background: var(--jic-pink);
 }
 
+/* Text začíná přesně na levém okraji obsahu ostatních sekcí. */
 .hero-content {
-  padding: clamp(20px, 2.4vw, 32px);
+  padding: clamp(20px, 2.4vw, 32px) 24px clamp(20px, 2.4vw, 32px) var(--content-left);
 }
 
 /* H1 ve dvou řádcích: klíčové slovo tučně, doplněk v display písmu. */
@@ -597,7 +612,7 @@ textarea:focus-visible {
 /* Mobil a tablet: fotka nahoře přes celou šířku, plocha s názvem pod ní. */
 @media (max-width: 1099px) {
   .hero {
-    --px: calc(100vw / 5);
+    --px: calc(var(--page-w) / 5);
     height: auto;
     display: flex;
     flex-direction: column;
@@ -624,6 +639,10 @@ textarea:focus-visible {
   .hero-plate {
     position: relative;
     width: 100%;
+  }
+
+  .hero-content {
+    padding-right: var(--content-left);
   }
 
   .px-step-2 {
