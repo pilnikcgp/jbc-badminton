@@ -1,7 +1,7 @@
 import './styles.css';
 import { site } from './config';
 import { fetchCurrentEdition, type Edition } from './lib/api';
-import { initAbout, initFooter, initHero } from './sections/hero';
+import { initFooter, initHero } from './sections/hero';
 import { initRegistration } from './sections/registration';
 import { initGallery } from './sections/gallery';
 import { initHistory } from './sections/history';
@@ -29,5 +29,4 @@ try {
 }
 
 initHero(section('uvod'), edition);
-initAbout(section('o-turnaji'), edition);
 initRegistration(section('registrace'), edition);

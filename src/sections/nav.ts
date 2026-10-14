@@ -15,16 +15,18 @@ export function initNav(root: HTMLElement) {
     <div class="container nav-inner">
       <a class="nav-brand" href="#uvod">${escapeHtml(n.brand)}</a>
       <nav class="nav" aria-label="${escapeHtml(n.label)}">
+        <a class="btn btn-sm nav-cta" href="${escapeHtml(n.cta.href)}">${escapeHtml(n.cta.label)}</a>
+        <!-- na mobilu hamburger vedle tlačítka, odkazy se rozbalí pod menu;
+             v DOM za ním, aby po otevření šly odkazy tabulátorem hned dál -->
+        <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-links"
+                aria-label="${escapeHtml(n.menuOpen)}">
+          <span aria-hidden="true"></span>
+        </button>
         <ul class="nav-links" id="nav-links">
           ${n.links
             .map((l) => `<li><a class="nav-link" href="${escapeHtml(l.href)}">${escapeHtml(l.label)}</a></li>`)
             .join('')}
         </ul>
-        <a class="btn btn-sm nav-cta" href="${escapeHtml(n.cta.href)}">${escapeHtml(n.cta.label)}</a>
-        <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-links"
-                aria-label="${escapeHtml(n.menuOpen)}">
-          <span aria-hidden="true"></span>
-        </button>
       </nav>
     </div>`;
 

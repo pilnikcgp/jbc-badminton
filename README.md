@@ -127,16 +127,17 @@ Jeden e-mail může být v ročníku přihlášený jen jednou (velikost písmen
 ## 4. Úprava textů
 
 Všechny texty jsou v **`src/config.ts`**: název akce, horní menu (`nav`),
-odstavce představení, formát turnaje, kroky časové osy, možnosti ankety, časté otázky (`faq.items`,
+perex a kroky časové osy (`timeline`), možnosti ankety, časté otázky (`faq.items`,
 novou otázku stačí připsat na konec), hlášky formuláře a nadpisy sekcí.
 
 **Časová osa:** aktuální krok nastavíte v `timeline.current` (`registration`,
 `date`, `format`, `tournament`). Kroky před ním se zobrazí jako hotové. Upravte, commitněte
 a pushněte do `main`, Netlify web nasadí samo.
 
-Termín, místo a název ročníku (nadpis v hero) se berou z tabulky `editions`
-(viz bod 3). Texty „Termín vybíráme“ a „Místo upřesníme“ se zobrazí, dokud
-v databázi chybí.
+**Detaily kroků** (datum, místo, formát…) doplníte u kroku do `detail`,
+např. `detail: 'do 8. 1. 2027'`. Prázdný `detail: ''` se nezobrazí.
+
+Rok v nadpisu hero se bere z tabulky `editions` (viz bod 3).
 
 ## 5. Fotky: galerie a hero
 

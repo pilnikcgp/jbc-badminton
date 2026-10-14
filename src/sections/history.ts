@@ -44,7 +44,8 @@ export async function initHistory(root: HTMLElement) {
     return;
   }
 
-  const editions = data.editions.filter((e) => e.has_results).sort((a, b) => a.year - b.year);
+  // sloupce ročníků od nejnovějšího; nový ročník s výsledky se zařadí sám na začátek
+  const editions = data.editions.filter((e) => e.has_results).sort((a, b) => b.year - a.year);
   const rows = buildRows(data);
   if (rows.length === 0) {
     body.innerHTML = `<p class="muted">Zatím žádné výsledky.</p>`;

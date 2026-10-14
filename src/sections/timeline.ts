@@ -2,11 +2,11 @@ import { escapeHtml } from '../lib/format';
 import { site } from '../config';
 
 /**
- * Vodorovná časová osa (na úzkém mobilu svislá). Aktuální krok se nastavuje
- * v src/config.ts (timeline.current).
+ * Perex a pod ním vodorovná časová osa (na úzkém mobilu svislá). Aktuální
+ * krok i detaily kroků se nastavují v src/config.ts (timeline).
  */
 export function initTimeline(root: HTMLElement) {
-  const { steps, current, heading, currentBadge } = site.timeline;
+  const { steps, current, heading, intro, currentBadge } = site.timeline;
   const currentIndex = Math.max(
     0,
     steps.findIndex((s) => s.id === current),
@@ -20,7 +20,7 @@ export function initTimeline(root: HTMLElement) {
         <span class="tl-marker" aria-hidden="true">${state === 'done' ? '✓' : i + 1}</span>
         <span class="tl-text">
           <span class="tl-label">${escapeHtml(step.label)}</span>
-          ${'note' in step && step.note ? `<span class="tl-note">${escapeHtml(step.note)}</span>` : ''}
+          ${step.detail ? `<span class="tl-detail">${escapeHtml(step.detail)}</span>` : ''}
           ${state === 'current' ? currentAction(step) : ''}
           <span class="sr-only">(${stateText})</span>
         </span>
@@ -28,7 +28,7 @@ export function initTimeline(root: HTMLElement) {
   });
 
   function currentAction(step: (typeof steps)[number]) {
-    if ('cta' in step && step.cta) {
+    if (step.cta) {
       return `<a class="btn btn-sm" href="${escapeHtml(step.cta.href)}">${escapeHtml(step.cta.label)}</a>`;
     }
     return `<span class="tl-badge">${escapeHtml(currentBadge)}</span>`;
@@ -37,6 +37,7 @@ export function initTimeline(root: HTMLElement) {
   root.innerHTML = `
     <div class="container">
       <h2 class="sr-only">${escapeHtml(heading)}</h2>
+      <p class="lead timeline-intro">${escapeHtml(intro)}</p>
       <ol class="timeline">${items.join('')}</ol>
     </div>`;
 }

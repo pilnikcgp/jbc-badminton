@@ -1,9 +1,6 @@
 import type { Edition } from '../lib/api';
-import { escapeHtml, formatDate } from '../lib/format';
+import { escapeHtml } from '../lib/format';
 import { site } from '../config';
-
-export const editionDate = (e: Edition | null) => (e?.date ? formatDate(e.date) : site.dateUnknown);
-export const editionVenue = (e: Edition | null) => e?.venue ?? site.venueUnknown;
 
 /**
  * Hero s pixelovou maskou podle identity JIC: mřížka má 5 čtverců na kratší
@@ -132,26 +129,6 @@ function drawMosaic(
     }
   }
   el.innerHTML = cells.join('');
-}
-
-export function initAbout(root: HTMLElement, edition: Edition | null) {
-  const facts = [
-    { label: 'Formát', value: site.about.format },
-    { label: 'Termín', value: editionDate(edition) },
-    { label: 'Místo', value: editionVenue(edition) },
-  ];
-  root.innerHTML = `
-    <div class="container about-grid">
-      <div>
-        <h2>${escapeHtml(site.about.heading)}</h2>
-        ${site.about.paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join('')}
-      </div>
-      <dl class="facts">
-        ${facts
-          .map((f) => `<div class="fact"><dt>${escapeHtml(f.label)}</dt><dd>${escapeHtml(f.value)}</dd></div>`)
-          .join('')}
-      </dl>
-    </div>`;
 }
 
 export function initFooter(root: HTMLElement) {

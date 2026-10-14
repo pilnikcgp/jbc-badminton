@@ -1,6 +1,5 @@
 // Všechny texty stránky na jednom místě. Upravte a nasaďte znovu.
-// Termín a místo se berou z databáze (tabulka editions); texty níže
-// se použijí, jen dokud tam nejsou vyplněné.
+// Rok v nadpisu hero se bere z databáze (tabulka editions).
 
 export const site = {
   /** Název akce – v záložce prohlížeče a v hero. */
@@ -29,12 +28,13 @@ export const site = {
     label: 'Hlavní menu',
     menuOpen: 'Otevřít menu',
     menuClose: 'Zavřít menu',
+    /** Tlačítko je v menu první, odkazy následují v pořadí sekcí na stránce. */
+    cta: { label: 'Registrace', href: '#registrace' },
     links: [
       { label: 'FAQs', href: '#caste-otazky' },
       { label: 'Fotogalerie', href: '#galerie' },
       { label: 'Síň slávy', href: '#historie' },
     ],
-    cta: { label: 'Registrace', href: '#registrace' },
   },
 
   footer: {
@@ -48,38 +48,28 @@ export const site = {
     logoAlt: 'JIC',
   },
 
-  /** Zobrazí se, dokud v databázi není vyplněný termín / místo. */
-  dateUnknown: 'Termín vybíráme',
-  venueUnknown: 'Místo upřesníme',
-
-  about: {
-    heading: 'O turnaji',
-    /** Odstavce úvodního textu. */
-    paragraphs: [
-      'Již šestý ročník desítkami JICáků oblíbeného klání v honbě za opeřeným nesmyslem je zde.',
-    ],
-    format: 'Formát vybíráme',
-  },
-
   /**
-   * Časová osa nad registrací. `current` je id aktuálního kroku; kroky před
-   * ním se zobrazí jako hotové, kroky za ním jako budoucí. `note` (nepovinné)
-   * se zobrazí pod názvem kroku, např. termín.
+   * Časová osa pod hero. `intro` je krátký perex nad ní. `current` je id
+   * aktuálního kroku; kroky před ním se zobrazí jako hotové, kroky za ním
+   * jako budoucí. `detail` (např. datum, místo, formát) se zobrazí pod názvem
+   * kroku, jen když je vyplněný; prázdný '' se nezobrazí.
    */
   timeline: {
     heading: 'Harmonogram',
+    intro:
+      'Šestý ročník desítkami JICáků oblíbeného klání v honbě za opeřeným nesmyslem je zde. Propotíme triko a pak doplníme ionty u piva.',
     steps: [
       {
         id: 'registration',
         label: 'Přihlašování',
-        note: 'do 8. 1. 2027',
+        detail: '',
         /** Tlačítko u aktuálního kroku (nepovinné). */
         cta: { label: 'Přihlásit se', href: '#registrace' },
       },
-      { id: 'date', label: 'Výběr termínu' },
-      { id: 'format', label: 'Výběr formátu turnaje' },
-      { id: 'tournament', label: 'Turnaj' },
-    ],
+      { id: 'date', label: 'Výběr termínu', detail: '' },
+      { id: 'format', label: 'Výběr formátu turnaje', detail: '' },
+      { id: 'tournament', label: 'Turnaj', detail: '' },
+    ] as { id: string; label: string; detail?: string; cta?: { label: string; href: string } }[],
     current: 'registration',
     /** Štítek u aktuálního kroku, který nemá vlastní tlačítko (cta). */
     currentBadge: 'Právě teď',

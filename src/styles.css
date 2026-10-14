@@ -180,10 +180,6 @@ strong {
   padding: clamp(56px, 9vw, 112px) 0;
 }
 
-.about {
-  --bg: var(--jic-green);
-}
-
 .timeline-section {
   --bg: var(--jic-yellow);
   --edge-accent: var(--jic-pink);
@@ -546,7 +542,7 @@ textarea:focus-visible {
 .nav-links {
   display: flex;
   gap: 4px;
-  margin: 0 8px 0 0;
+  margin: 0 0 0 8px;
   padding: 0;
   list-style: none;
 }
@@ -895,44 +891,7 @@ textarea:focus-visible {
 }
 
 /* ==========================================================================
-   O turnaji
-   ========================================================================== */
-
-.about-grid {
-  display: grid;
-  gap: 32px 64px;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-  align-items: start;
-}
-
-.about-grid p {
-  max-width: 62ch;
-}
-
-.facts {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-}
-
-.fact {
-  padding: 16px 20px;
-  background: var(--white);
-}
-
-.fact dt {
-  font-size: 0.95rem;
-}
-
-.fact dd {
-  margin: 2px 0 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-  line-height: 1.3;
-}
-
-/* ==========================================================================
-   Časová osa (žlutá sekce nad registrací)
+   Perex a časová osa (žlutá sekce pod hero)
    Hotové kroky: fialový čtverec s ✓. Aktuální: větší růžový čtverec, tučný
    popisek a štítek. Budoucí: bílý čtverec s rámečkem. Spojnice je plná
    k dosaženým krokům a čárkovaná k budoucím. Na úzkém mobilu svisle.
@@ -940,6 +899,10 @@ textarea:focus-visible {
 
 .timeline-section {
   padding: clamp(40px, 6vw, 72px) 0;
+}
+
+.timeline-intro {
+  margin-bottom: clamp(32px, 4vw, 48px);
 }
 
 .timeline {
@@ -1036,7 +999,7 @@ textarea:focus-visible {
   margin-top: 4px;
 }
 
-.tl-note {
+.tl-detail {
   font-weight: 500;
   font-size: 1rem;
 }
@@ -1243,7 +1206,6 @@ textarea:focus-visible {
 }
 
 @media (max-width: 800px) {
-  .about-grid,
   .registration-grid {
     grid-template-columns: minmax(0, 1fr);
   }
