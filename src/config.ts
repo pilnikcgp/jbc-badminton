@@ -93,6 +93,41 @@ export const site = {
     listEmpty: 'Zatím nikdo. Buďte první!',
   },
 
+  /**
+   * Časté otázky pod registrací. Každá položka = jedna otázka; odpověď může
+   * mít víc odstavců. Nové otázky stačí připsat na konec seznamu.
+   */
+  faq: {
+    heading: 'Časté otázky',
+    items: [
+      {
+        question: 'S badmintonem začínám. Je turnaj pro mě?',
+        answer: [
+          'Na turnaji se běžně potkávají hráčky a hráči různých úrovní. Je nicméně fajn, abys alespoň základní zkušenost s tímto sportem měl/a. :-)',
+        ],
+      },
+      {
+        question: 'Jaký bude formát turnaje?',
+        answer: [
+          'Formát bude vycházet jednak z počtu přihlášených, jednak z preferencí účastníků. Při registraci zvolíš, zda tě více láká dvouhra či čtyřhra a zda jsi pro smíšenou či nesmíšenou variantu.',
+          'Během uplynulých pěti ročníků se nicméně vždy hrála smíšená čtyřhra. :-) Jak to bude tentokrát?',
+        ],
+      },
+      {
+        question: 'Jak v případě čtyřhry probíhá losování párů?',
+        answer: [
+          'Snažíme se o to, aby byl turnaj co možná nejvyrovnanější. Proto k sobě nalosováváme zkušenější hráče s těmi méně zkušenými. Svou úroveň zadáš při registraci.',
+        ],
+      },
+      {
+        question: 'Kdy se turnaj koná?',
+        answer: [
+          'Turnaj obvykle probíhá v některý z únorových pátků po práci, o konkrétním termínu budeme hlasovat po uzavření přihlášek.',
+        ],
+      },
+    ],
+  },
+
   gallery: {
     heading: 'Fotogalerie',
   },

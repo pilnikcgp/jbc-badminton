@@ -122,8 +122,8 @@ Jeden e-mail může být v ročníku přihlášený jen jednou (velikost písmen
 ## 4. Úprava textů
 
 Všechny texty jsou v **`src/config.ts`**: název akce, odstavce představení,
-formát turnaje, kroky časové osy, možnosti ankety, hlášky formuláře a nadpisy
-sekcí.
+formát turnaje, kroky časové osy, možnosti ankety, časté otázky (`faq.items`,
+novou otázku stačí připsat na konec), hlášky formuláře a nadpisy sekcí.
 
 **Časová osa:** aktuální krok nastavíte v `timeline.current` (`registration`,
 `date`, `format`, `tournament`). Kroky před ním se zobrazí jako hotové. Upravte, commitněte
