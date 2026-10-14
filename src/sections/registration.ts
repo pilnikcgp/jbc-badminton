@@ -1,10 +1,13 @@
 import {
+  fetchPollResults,
   fetchRegistrations,
   register,
   type Edition,
   type Gender,
+  type PollResult,
   type PublicRegistration,
   type RegisterResult,
+  type TournamentFormat,
 } from '../lib/api';
 import { escapeHtml, plural } from '../lib/format';
 import { site } from '../config';
@@ -25,10 +28,15 @@ export function initRegistration(root: HTMLElement, edition: Edition | null) {
       <div class="registration-list-wrap">
         <h3>${escapeHtml(t.listHeading)}</h3>
         <div class="registration-list"><p class="muted">Načítám…</p></div>
+        <div class="poll">
+          <h3>${escapeHtml(t.pollHeading)}</h3>
+          <div class="poll-body"><p class="muted">Načítám…</p></div>
+        </div>
       </div>
     </div>`;
 
   const listEl = root.querySelector<HTMLElement>('.registration-list')!;
+  const pollEl = root.querySelector<HTMLElement>('.poll-body')!;
   const refreshList = async () => {
     try {
       renderList(listEl, await fetchRegistrations());
@@ -37,10 +45,22 @@ export function initRegistration(root: HTMLElement, edition: Edition | null) {
       listEl.innerHTML = `<p class="notice notice-error">Seznam se nepodařilo načíst.</p>`;
     }
   };
-  refreshList();
+  const refreshPoll = async () => {
+    try {
+      renderPoll(pollEl, await fetchPollResults());
+    } catch (err) {
+      console.error(err);
+      pollEl.innerHTML = `<p class="notice notice-error">Výsledek ankety se nepodařilo načíst.</p>`;
+    }
+  };
+  // Seznam i anketa se načítají a po registraci obnovují spolu.
+  const refreshAll = async () => {
+    await Promise.all([refreshList(), refreshPoll()]);
+  };
+  refreshAll();
 
   const form = root.querySelector<HTMLFormElement>('form');
-  if (form) bindForm(form, refreshList);
+  if (form) bindForm(form, refreshAll);
 }
 
 function formHtml() {
@@ -63,6 +83,17 @@ function formHtml() {
           <label><input type="radio" name="gender" value="male" /><span>Hráč</span></label>
         </div>
         <small class="muted">Kvůli losu smíšené čtyřhry.</small>
+      </fieldset>
+      <fieldset class="field">
+        <legend>${escapeHtml(t.formatQuestion)}</legend>
+        <div class="choices">
+          ${t.formats
+            .map(
+              (f, i) =>
+                `<label><input type="radio" name="format" value="${f.value}"${i === 0 ? ' required' : ''} /><span>${escapeHtml(f.label)}</span></label>`,
+            )
+            .join('')}
+        </div>
       </fieldset>
       <div class="field">
         <label for="reg-note">Poznámka <span class="muted">(nepovinné)</span></label>
@@ -109,6 +140,7 @@ function bindForm(form: HTMLFormElement, onSuccess: () => Promise<void>) {
         fullName: String(data.get('fullName') ?? ''),
         email: String(data.get('email') ?? ''),
         gender: data.get('gender') as Gender,
+        format: data.get('format') as TournamentFormat,
         note: String(data.get('note') ?? ''),
         website: String(data.get('website') ?? ''),
       });
@@ -166,4 +198,29 @@ function renderList(el: HTMLElement, regs: PublicRegistration[]) {
   el.innerHTML = `
     <p class="reg-summary">${summary}</p>
     ${group('Hráčky', women)}${group('Hráči', men)}`;
+}
+
+/** Vodorovné pruhy pro všechny možnosti (i s nulou), počet hlasů a procento. */
+function renderPoll(el: HTMLElement, results: PollResult[]) {
+  const votesByFormat = new Map(results.map((r) => [r.format, r.votes]));
+  const total = results.reduce((sum, r) => sum + r.votes, 0);
+  const pct = (v: number) => (total ? Math.round((v / total) * 100) : 0);
+  const votesText = (v: number) => `${v} ${plural(v, 'hlas', 'hlasy', 'hlasů')}`;
+
+  const rows = t.formats.map((f, i) => {
+    const v = votesByFormat.get(f.value as TournamentFormat) ?? 0;
+    const p = pct(v);
+    return `
+      <li class="poll-row poll-color-${i % 4}">
+        <div class="poll-meta">
+          <span class="poll-label">${escapeHtml(f.label)}</span>
+          <span class="poll-value">${votesText(v)} · ${p} %</span>
+        </div>
+        <div class="poll-track" aria-hidden="true"><i style="width: ${p}%"></i></div>
+      </li>`;
+  });
+
+  el.innerHTML = `
+    <p class="poll-total">${total ? `Celkem <strong>${votesText(total)}</strong>` : escapeHtml(t.pollEmpty)}</p>
+    <ul class="poll-list">${rows.join('')}</ul>`;
 }

@@ -9,6 +9,14 @@ export type EditionStatus =
 
 export type Gender = 'male' | 'female';
 
+export type TournamentFormat = 'mixed_doubles' | 'gender_doubles' | 'mixed_singles' | 'gender_singles';
+
+export interface PollResult {
+  format: TournamentFormat;
+  position: number;
+  votes: number;
+}
+
 export interface Edition {
   id: number;
   year: number;
@@ -83,10 +91,17 @@ export async function fetchRegistrations(): Promise<PublicRegistration[]> {
   return unwrap(res) as PublicRegistration[];
 }
 
+/** Souhrn ankety pro aktuální ročník: počty hlasů, žádné volby jednotlivců. */
+export async function fetchPollResults(): Promise<PollResult[]> {
+  const res = await supabase.from('format_poll_results').select('*').order('position');
+  return unwrap(res) as PollResult[];
+}
+
 export async function register(input: {
   fullName: string;
   email: string;
   gender: Gender;
+  format: TournamentFormat;
   note: string;
   website: string;
 }): Promise<RegisterResult> {
@@ -94,6 +109,7 @@ export async function register(input: {
     p_full_name: input.fullName,
     p_email: input.email,
     p_gender: input.gender,
+    p_format: input.format,
     p_note: input.note,
     p_website: input.website,
   });

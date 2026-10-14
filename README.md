@@ -30,7 +30,9 @@ Web je neveřejný: `<meta name="robots" content="noindex">` a hlavička
    heslo k databázi si uložte (web ho nepotřebuje). Data API nechte zapnuté.
 2. **SQL Editor → New query** → vložte celý soubor
    `supabase/migrations/20260922120000_init.sql` → **Run**.
-   Vytvoří tabulky, pohledy, RLS a funkci `register()`.
+   Vytvoří tabulky, pohledy, RLS a funkci `register()`. Pak stejně spusťte
+   další migrace ze složky `supabase/migrations/` v pořadí podle názvu
+   (`20261014120000_format_poll.sql` přidává anketu o formátu turnaje).
 3. Nový dotaz → vložte celý `supabase/seed.sql` → **Run**. Nahraje ročníky
    2022–2026, hráče a páry. Na konci sám ověří počty účastí a úspěšnosti proti
    Excelu; při neshodě skončí chybou a nic neuloží. Výsledek „Success. No rows
@@ -113,8 +115,12 @@ Jeden e-mail může být v ročníku přihlášený jen jednou (velikost písmen
 
 ## 4. Úprava textů
 
-Všechny texty jsou v **`src/config.ts`**: název akce, podtitul, odstavce
-představení, formát turnaje, hlášky formuláře a nadpisy sekcí. Upravte, commitněte
+Všechny texty jsou v **`src/config.ts`**: název akce, odstavce představení,
+formát turnaje, kroky časové osy, možnosti ankety, hlášky formuláře a nadpisy
+sekcí.
+
+**Časová osa:** aktuální krok nastavíte v `timeline.current` (`registration`,
+`date`, `format`, `tournament`). Kroky před ním se zobrazí jako hotové. Upravte, commitněte
 a pushněte do `main`, Netlify web nasadí samo.
 
 Termín, místo a název ročníku (nadpis v hero) se berou z tabulky `editions`
@@ -224,12 +230,13 @@ aspoň jeden tým s vyplněným umístěním.
 | `editions` | ročníky: rok, název, termín, místo, stav, `poll_url` (fáze 2) |
 | `players` | hráči (jméno je unikátní) |
 | `teams` | páry v ročníku a konečné umístění (fáze 3 na ně naváže zápasy) |
-| `registrations` | přihlášky; `player_id` pro propojení s hráčem ve fázi 3 |
+| `registrations` | přihlášky včetně `preferred_format` (anketa); `player_id` pro propojení s hráčem ve fázi 3 |
 | `current_edition` | pohled: aktuální ročník (nejvyšší `year`) |
 | `edition_summary` | pohled: počet týmů a zda má ročník výsledky |
 | `player_results` | pohled: hráč × ročník, umístění, spoluhráč, úspěšnost |
 | `player_stats` | pohled: počet účastí a průměrná úspěšnost |
 | `registrations_public` | pohled: jen jméno a pohlaví přihlášených v aktuálním ročníku |
+| `format_poll_results` | pohled: počet hlasů pro každý formát turnaje v aktuálním ročníku (bez voleb jednotlivců) |
 | `register()` | funkce pro registraci z webu (honeypot, validace, hlášky) |
 
 Úspěšnost v ročníku = `1 − (umístění − 1) / (počet týmů − 1)`; průměr se

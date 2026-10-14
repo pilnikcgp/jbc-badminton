@@ -71,6 +71,16 @@ export const site = {
     invalid: 'Zkontrolujte prosím vyplněné údaje.',
     error: 'Registraci se nepodařilo odeslat. Zkuste to prosím znovu.',
     listHeading: 'Přihlášení',
+    /** Otázka ve formuláři; hodnoty odpovídají enumu tournament_format v databázi. */
+    formatQuestion: 'Preferovaný formát turnaje',
+    formats: [
+      { value: 'mixed_doubles', label: 'Smíšená čtyřhra' },
+      { value: 'gender_doubles', label: 'Čtyřhra ženy / čtyřhra muži' },
+      { value: 'mixed_singles', label: 'Smíšená dvouhra' },
+      { value: 'gender_singles', label: 'Dvouhra ženy / dvouhra muži' },
+    ],
+    pollHeading: 'Průběžný výsledek ankety o formátu',
+    pollEmpty: 'Zatím nikdo nehlasoval.',
     listEmpty: 'Zatím nikdo. Buďte první!',
   },
 
