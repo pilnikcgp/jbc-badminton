@@ -39,20 +39,20 @@ export const site = {
     heading: 'O turnaji',
     /** Odstavce úvodního textu. */
     paragraphs: [
-      'Zástupný text: neformální interní badmintonový turnaj, na který se každý rok těšíme. Hrajeme smíšenou čtyřhru – přihlásíte se sami a páry vylosujeme.',
-      'Zástupný text: nezáleží na tom, jestli hrajete pravidelně, nebo jste raketu drželi naposledy na chatě. Jde hlavně o to se potkat a zahrát si.',
+      'Již šestý ročník desítkami JICáků oblíbeného klání v honbě za opeřeným nesmyslem je zde.',
     ],
-    format: 'Smíšená čtyřhra, páry losem',
+    format: 'Formát vybíráme',
   },
 
   /**
    * Časová osa nad registrací. `current` je id aktuálního kroku; kroky před
-   * ním se zobrazí jako hotové, kroky za ním jako budoucí.
+   * ním se zobrazí jako hotové, kroky za ním jako budoucí. `note` (nepovinné)
+   * se zobrazí pod názvem kroku, např. termín.
    */
   timeline: {
     heading: 'Harmonogram',
     steps: [
-      { id: 'registration', label: 'Přihlašování' },
+      { id: 'registration', label: 'Přihlašování', note: 'do 8. 1. 2027' },
       { id: 'date', label: 'Výběr termínu' },
       { id: 'format', label: 'Výběr formátu turnaje' },
       { id: 'tournament', label: 'Turnaj' },
@@ -63,7 +63,7 @@ export const site = {
 
   registration: {
     heading: 'Registrace',
-    intro: 'Přihlaste se jako jednotlivec, páry vylosujeme.',
+    intro: 'Přihlašování končí 8. ledna 2027.',
     closed: 'Registrace je teď uzavřená.',
     notYetOpen: 'Registrace zatím není otevřená. Sledujte tuto stránku.',
     success: 'Hotovo, jste přihlášení. Těšíme se!',

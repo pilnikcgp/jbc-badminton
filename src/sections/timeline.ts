@@ -20,6 +20,7 @@ export function initTimeline(root: HTMLElement) {
         <span class="tl-marker" aria-hidden="true">${state === 'done' ? '✓' : i + 1}</span>
         <span class="tl-text">
           <span class="tl-label">${escapeHtml(step.label)}</span>
+          ${'note' in step && step.note ? `<span class="tl-note">${escapeHtml(step.note)}</span>` : ''}
           ${state === 'current' ? `<span class="tl-badge">${escapeHtml(currentBadge)}</span>` : ''}
           <span class="sr-only">(${stateText})</span>
         </span>

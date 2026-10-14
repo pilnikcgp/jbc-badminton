@@ -545,6 +545,30 @@ textarea:focus-visible {
   height: var(--px);
 }
 
+/* Mozaika nad plochou s názvem: žluté pozadí levého sloupce a dlaždice
+   v barvách palety, které kreslí hero.ts. Jen desktop. */
+/* Výšku (= jen část nad plochou) nastavuje hero.ts; dlaždice vlevo od textu
+   sahají i do modré plochy pod ní, proto overflow: visible a z-index nad ní. */
+.hero-mosaic {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: var(--plate-w);
+  background: var(--jic-yellow);
+  pointer-events: none;
+}
+
+.hero-mosaic i {
+  position: absolute;
+  display: block;
+}
+
+/* krok z plochy nahoru teď kreslí mozaika */
+.px-step-2 {
+  display: none;
+}
+
 /* pravý horní roh fotky: prázdná zeď */
 .px-photo-tr {
   top: 0;
@@ -552,11 +576,11 @@ textarea:focus-visible {
   background: var(--jic-coral);
 }
 
-/* levý horní roh fotky: zeď */
+/* levý horní roh fotky: zeď (růžová, aby nesplývala se žlutou mozaikou) */
 .px-photo-tl {
   top: 0;
   left: var(--plate-w);
-  background: var(--jic-yellow);
+  background: var(--jic-pink);
 }
 
 /* Plocha pro text složená z pixelů; výšku přichytává JS na násobek --px. */
@@ -645,7 +669,12 @@ textarea:focus-visible {
     padding-right: var(--content-left);
   }
 
+  .hero-mosaic {
+    display: none;
+  }
+
   .px-step-2 {
+    display: block;
     left: auto;
     right: 0;
     bottom: 100%;
@@ -789,6 +818,11 @@ textarea:focus-visible {
 
 .is-done .tl-label {
   font-weight: 500;
+}
+
+.tl-note {
+  font-weight: 500;
+  font-size: 1rem;
 }
 
 .tl-badge {
