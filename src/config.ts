@@ -145,6 +145,12 @@ export const site = {
           'Turnaj obvykle probíhá v některý z únorových pátků po práci, o konkrétním termínu budeme hlasovat po uzavření přihlášek.',
         ],
       },
+      {
+        question: 'Kolik mne účast na turnaji bude stát?',
+        answer: [
+          'Možná pár modřin a bolavých končetin z tréninků. ;-) Pronájem kurtů a ceny pro vítěze hradí JIC. Děkujeme!',
+        ],
+      },
     ],
   },
 
