@@ -24,6 +24,11 @@
 
   --ink: var(--jic-purple);
 
+  /* Odvozené jemné tóny (jen linky a hover, ne plochy):
+     --line = 18 % fialové na bílé, --tint = 45 % žluté na bílé. */
+  --line: #e3d3f3;
+  --tint: #ffedc6;
+
   /* Písma: dočasné volné náhrady. Po potvrzení webové licence stačí sem
      doplnit 'GT America' a 'GT Super Display' (a jejich @font-face). */
   --font-sans: 'Archivo', 'Helvetica Neue', Arial, sans-serif; /* za GT America */
@@ -149,61 +154,79 @@ strong {
 }
 
 /* ==========================================================================
-   Sekce: střídání bílé a lila, pixelové oddělovače
+   Sekce: každá má vlastní veselou barvu, pixelové oddělovače
+   Lila a šedé odstíny jako pozadí nepoužíváme (na obrazovce působí šedě).
+   Bílá jen tam, kde je hodně textu (registrace, tabulka).
    ========================================================================== */
 
-.section {
-  position: relative;
-  padding: clamp(56px, 9vw, 112px) 0;
-  background: var(--white);
-}
-
-.about,
-.gallery,
+.section,
 .site-footer {
-  background: var(--jic-lilac);
+  --bg: var(--white);
+  --edge-accent: var(--jic-coral);
+  position: relative;
+  background: var(--bg);
 }
 
-/* Oddělovač: několik čtverců barvy sekce „vystupuje“ do sekce nad ní.
-   Jeden pseudoelement, další čtverce jsou ostré box-shadow bez rozostření. */
+.section {
+  padding: clamp(56px, 9vw, 112px) 0;
+}
+
+.about {
+  --bg: var(--jic-green);
+}
+
+.timeline-section {
+  --bg: var(--jic-yellow);
+  --edge-accent: var(--jic-pink);
+}
+
+.gallery {
+  --bg: var(--jic-blue);
+  --edge-accent: var(--jic-yellow);
+}
+
+.site-footer {
+  --bg: var(--jic-pink);
+  --edge-accent: var(--jic-blue);
+}
+
+/* Oddělovač: několik čtverců barvy sekce „vystupuje“ do sekce nad ní,
+   jeden z nich v akcentní barvě. Jeden pseudoelement, další čtverce jsou
+   ostré box-shadow bez rozostření. */
+.timeline-section::before,
 .registration::before,
-.history::before,
 .gallery::before,
+.history::before,
 .site-footer::before {
   content: '';
   position: absolute;
   top: calc(-1 * var(--edge));
   width: var(--edge);
   height: var(--edge);
+  background: var(--bg);
 }
 
-/* bílá do lila, vlevo */
+/* vlevo (bílé sekce) */
 .registration::before,
 .history::before {
   left: 0;
-  background: var(--white);
   box-shadow:
-    var(--edge) 0 0 0 var(--white),
-    0 calc(-1 * var(--edge)) 0 0 var(--white),
-    calc(3 * var(--edge)) 0 0 0 var(--white);
+    var(--edge) 0 0 0 var(--bg),
+    0 calc(-1 * var(--edge)) 0 0 var(--bg),
+    calc(3 * var(--edge)) 0 0 0 var(--bg),
+    calc(2 * var(--edge)) calc(-1 * var(--edge)) 0 0 var(--edge-accent);
 }
 
-/* lila do bílé, vpravo, s jedním akcentem */
+/* vpravo (barevné sekce) */
+.timeline-section::before,
 .gallery::before,
 .site-footer::before {
   right: 0;
-  background: var(--jic-lilac);
   box-shadow:
-    calc(-1 * var(--edge)) 0 0 0 var(--jic-lilac),
-    0 calc(-1 * var(--edge)) 0 0 var(--jic-lilac),
-    calc(-2 * var(--edge)) calc(-1 * var(--edge)) 0 0 var(--jic-yellow);
-}
-
-.site-footer::before {
-  box-shadow:
-    calc(-1 * var(--edge)) 0 0 0 var(--jic-lilac),
-    0 calc(-1 * var(--edge)) 0 0 var(--jic-lilac),
-    calc(-3 * var(--edge)) 0 0 0 var(--jic-lilac);
+    calc(-1 * var(--edge)) 0 0 0 var(--bg),
+    0 calc(-1 * var(--edge)) 0 0 var(--bg),
+    calc(-3 * var(--edge)) 0 0 0 var(--bg),
+    calc(-2 * var(--edge)) calc(-1 * var(--edge)) 0 0 var(--edge-accent);
 }
 
 /* ==========================================================================
@@ -260,7 +283,7 @@ strong {
 }
 
 .notice-info {
-  background: var(--jic-lilac);
+  background: var(--jic-yellow);
 }
 
 .field {
@@ -403,7 +426,7 @@ textarea:focus-visible {
   position: relative;
   height: var(--hero-h);
   overflow: hidden;
-  background: var(--jic-lilac);
+  background: var(--white);
 }
 
 @supports (height: 1svh) {
@@ -424,7 +447,7 @@ textarea:focus-visible {
   right: 0;
   bottom: 0;
   left: var(--plate-w);
-  background: var(--jic-lilac);
+  background: var(--white);
 }
 
 .hero-image {
@@ -446,14 +469,14 @@ textarea:focus-visible {
 .px-photo-tr {
   top: 0;
   right: 0;
-  background: var(--jic-blue);
+  background: var(--jic-coral);
 }
 
-/* levý horní roh fotky: zelená zeď */
+/* levý horní roh fotky: zeď */
 .px-photo-tl {
   top: 0;
   left: var(--plate-w);
-  background: var(--jic-green);
+  background: var(--jic-yellow);
 }
 
 /* Plocha pro text složená z pixelů; výšku přichytává JS na násobek --px. */
@@ -465,13 +488,13 @@ textarea:focus-visible {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: var(--jic-yellow);
+  background: var(--jic-blue);
 }
 
 .px-step-1 {
   left: 0;
   bottom: 100%;
-  background: var(--jic-yellow);
+  background: var(--jic-blue);
 }
 
 .px-step-2 {
@@ -484,15 +507,9 @@ textarea:focus-visible {
   padding: clamp(20px, 2.4vw, 32px);
 }
 
-/* Nadtitulek: GT America Regular */
-.hero-kicker {
-  margin: 0 0 6px;
-  font-size: clamp(1rem, 0.95rem + 0.2vw, 1.15rem);
-}
-
-/* Název sub-brandu ve dvou řádcích: JBC tučně, doplněk v display písmu. */
+/* H1 ve dvou řádcích: klíčové slovo tučně, doplněk v display písmu. */
 .hero h1 {
-  margin: 0 0 14px;
+  margin: 0 0 20px;
 }
 
 .hero-name {
@@ -507,14 +524,8 @@ textarea:focus-visible {
   display: block;
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(1.5rem, 1.2rem + 0.9vw, 2.1rem);
-  line-height: 1.2;
-}
-
-.hero-date {
-  margin: 0 0 18px;
-  font-weight: 500;
-  font-size: clamp(1.1rem, 1rem + 0.4vw, 1.3rem);
+  font-size: clamp(1.9rem, 1.4rem + 1.4vw, 2.75rem);
+  line-height: 1.1;
 }
 
 /* Mobil a tablet: fotka nahoře přes celou šířku, plocha s názvem pod ní. */
@@ -553,7 +564,7 @@ textarea:focus-visible {
     left: auto;
     right: 0;
     bottom: 100%;
-    background: var(--jic-blue);
+    background: var(--jic-yellow);
   }
 }
 
@@ -595,6 +606,160 @@ textarea:focus-visible {
 }
 
 /* ==========================================================================
+   Časová osa (žlutá sekce nad registrací)
+   Hotové kroky: fialový čtverec s ✓. Aktuální: větší růžový čtverec, tučný
+   popisek a štítek. Budoucí: bílý čtverec s rámečkem. Spojnice je plná
+   k dosaženým krokům a čárkovaná k budoucím. Na úzkém mobilu svisle.
+   ========================================================================== */
+
+.timeline-section {
+  padding: clamp(40px, 6vw, 72px) 0;
+}
+
+.timeline {
+  --marker: 52px;
+  --marker-current: 72px;
+  --rail: 4px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tl-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+/* spojnice od předchozího kroku k tomuto */
+.tl-step + .tl-step::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--marker-current) / 2 - var(--rail) / 2);
+  right: 50%;
+  width: 100%;
+  height: var(--rail);
+  background: var(--jic-purple);
+}
+
+.tl-step.is-upcoming::before {
+  background: repeating-linear-gradient(
+    to right,
+    var(--jic-purple) 0 10px,
+    transparent 10px 18px
+  );
+}
+
+/* všechny značky zarovnané na střed pásu výšky --marker-current */
+.tl-marker {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: var(--marker);
+  height: var(--marker);
+  margin: calc((var(--marker-current) - var(--marker)) / 2) 0;
+  border: 3px solid var(--jic-purple);
+  background: var(--white);
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.is-done .tl-marker {
+  background: var(--jic-purple);
+  color: var(--white);
+  font-size: 1.5rem;
+}
+
+.is-current .tl-marker {
+  width: var(--marker-current);
+  height: var(--marker-current);
+  margin: 0;
+  background: var(--jic-pink);
+  font-size: 1.75rem; /* růžová: jen velký tučný text */
+}
+
+.tl-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.tl-label {
+  font-size: 1.1rem;
+  line-height: 1.25;
+}
+
+.is-current .tl-label {
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.is-done .tl-label {
+  font-weight: 500;
+}
+
+.tl-badge {
+  padding: 2px 10px;
+  background: var(--jic-purple);
+  color: var(--white);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* úzký mobil: svisle, značka vlevo, text vpravo */
+@media (max-width: 560px) {
+  .timeline {
+    --row: 92px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tl-step {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    min-height: var(--row);
+    text-align: left;
+  }
+
+  .tl-marker {
+    flex: none;
+    margin: 0 calc((var(--marker-current) - var(--marker)) / 2);
+  }
+
+  .is-current .tl-marker {
+    margin: 0;
+  }
+
+  .tl-text {
+    align-items: flex-start;
+  }
+
+  .tl-step + .tl-step::before {
+    top: calc(-1 * var(--row) / 2);
+    right: auto;
+    left: calc(var(--marker-current) / 2 - var(--rail) / 2);
+    width: var(--rail);
+    height: var(--row);
+  }
+
+  .tl-step.is-upcoming::before {
+    background: repeating-linear-gradient(
+      to bottom,
+      var(--jic-purple) 0 10px,
+      transparent 10px 18px
+    );
+  }
+}
+
+/* ==========================================================================
    Registrace
    ========================================================================== */
 
@@ -611,7 +776,7 @@ textarea:focus-visible {
 
 .registration-list-wrap {
   padding: 28px;
-  border: 2px solid var(--jic-lilac);
+  border: 2px solid var(--jic-purple);
 }
 
 .reg-summary {
@@ -650,10 +815,31 @@ textarea:focus-visible {
   list-style: none;
 }
 
+/* Štítky cyklicky střídají žlutou, modrou, zelenou, růžovou a korálovou.
+   Na růžové a korálové (kontrast 4,1–4,4 : 1) musí být text velký tučný,
+   proto jsou tučné a ≥ 18,7 px všechny štítky. */
 .chips li {
-  padding: 5px 12px;
-  background: var(--jic-lilac);
+  padding: 4px 12px;
+  background: var(--jic-yellow);
+  font-weight: 700;
+  font-size: 1.1875rem;
   line-height: 1.4;
+}
+
+.chips li:nth-child(5n + 2) {
+  background: var(--jic-blue);
+}
+
+.chips li:nth-child(5n + 3) {
+  background: var(--jic-green);
+}
+
+.chips li:nth-child(5n + 4) {
+  background: var(--jic-pink);
+}
+
+.chips li:nth-child(5n + 5) {
+  background: var(--jic-coral);
 }
 
 @media (max-width: 800px) {
@@ -756,7 +942,7 @@ textarea:focus-visible {
 }
 
 .lightbox::backdrop {
-  background: var(--jic-lilac);
+  background: var(--white);
 }
 
 .lightbox-figure {
@@ -861,7 +1047,7 @@ textarea:focus-visible {
 .history-table th,
 .history-table td {
   padding: 0;
-  border-bottom: 1px solid var(--jic-lilac);
+  border-bottom: 1px solid var(--line);
   text-align: center;
   white-space: nowrap;
 }
@@ -871,7 +1057,7 @@ textarea:focus-visible {
 }
 
 .history-table tbody tr:hover > * {
-  background-color: var(--jic-lilac);
+  background-color: var(--tint);
 }
 
 /* Záhlaví fialové s bílým textem; celá buňka je tlačítko pro řazení. */
@@ -941,7 +1127,7 @@ th[aria-sort='descending'] .sort-icon {
   z-index: 1;
   text-align: left;
   background: var(--white);
-  border-right: 2px solid var(--jic-lilac);
+  border-right: 2px solid var(--line);
 }
 
 .history-table thead .col-name {
@@ -966,7 +1152,7 @@ th[aria-sort='descending'] .sort-icon {
 }
 
 .history-table tbody tr:hover > td.heat {
-  background: var(--heat, var(--jic-lilac));
+  background: var(--heat, var(--tint));
 }
 
 .history-table .col-year {
@@ -989,7 +1175,7 @@ th[aria-sort='descending'] .sort-icon {
 }
 
 .place:hover {
-  background: var(--jic-lilac);
+  background: var(--tint);
   outline: 2px solid var(--jic-purple);
   outline-offset: -2px;
 }
@@ -1009,6 +1195,7 @@ th[aria-sort='descending'] .sort-icon {
   background: var(--jic-yellow);
 }
 
+/* 2. místo: lila podle DESIGN.md (jediné místo, kde lila zůstává) */
 .place.medal-2 {
   background: var(--jic-lilac);
 }
@@ -1076,7 +1263,10 @@ th[aria-sort='descending'] .sort-icon {
   padding: 40px 0;
 }
 
+/* růžová: fialový text jen velký tučný */
 .footer-inner {
+  font-weight: 700;
+  font-size: 1.1875rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;

@@ -12,7 +12,7 @@ export const editionVenue = (e: Edition | null) => e?.venue ?? site.venueUnknown
  * v rozích s prázdnou zdí či podlahou, aby nezakrývaly obličeje.
  */
 export function initHero(root: HTMLElement, edition: Edition | null) {
-  const line2 = site.hero.nameLine2.replace('{year}', edition ? String(edition.year) : '').trim();
+  const rest = site.hero.titleRest.replace('{year}', edition ? String(edition.year) : '').trim();
   root.innerHTML = `
     <div class="hero-photo">
       <img class="hero-image" src="${escapeHtml(site.hero.image)}" alt="${escapeHtml(site.hero.imageAlt)}"
@@ -24,12 +24,10 @@ export function initHero(root: HTMLElement, edition: Edition | null) {
       <i class="px px-step-1" aria-hidden="true"></i>
       <i class="px px-step-2" aria-hidden="true"></i>
       <div class="hero-content">
-        <p class="hero-kicker">${escapeHtml(site.tagline)}</p>
         <h1>
-          <span class="hero-name">${escapeHtml(site.name)}</span>
-          ${line2 ? `<span class="hero-name-2">${escapeHtml(line2)}</span>` : ''}
+          <span class="hero-name">${escapeHtml(site.hero.titleKeyword)}</span>
+          <span class="hero-name-2">${escapeHtml(rest)}</span>
         </h1>
-        <p class="hero-date">${escapeHtml(editionDate(edition))}</p>
         <a class="btn" href="#registrace">${escapeHtml(site.hero.cta)}</a>
       </div>
     </div>`;

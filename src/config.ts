@@ -3,20 +3,20 @@
 // se použijí, jen dokud tam nejsou vyplněné.
 
 export const site = {
-  /** Název akce – v hlavičce stránky i v záložce prohlížeče. */
-  name: 'JBC',
-  /** Nadtitulek nad názvem v hero sekci. */
-  tagline: 'Turnaj ve smíšené čtyřhře',
+  /** Název akce – v záložce prohlížeče a v hero. */
+  name: 'JIC Badminton Cup',
 
   hero: {
     /** Fotka přes celou šířku, soubor v public/. Autentický moment s lidmi, ne prázdný kurt. */
     image: '/hero.jpg',
     imageAlt: 'Hráčky a hráči s raketami nad hlavou na kurtu v hale během minulého ročníku',
     /**
-     * Druhý řádek názvu (první řádek je `name`). {year} se nahradí rokem
-     * aktuálního ročníku z databáze.
+     * Nadpis H1 ve dvou řádcích podle manuálu sub-brandů: klíčové slovo
+     * (GT America Bold) a doplněk (GT Super Display). {year} se nahradí
+     * rokem aktuálního ročníku z databáze.
      */
-    nameLine2: 'badmintonový turnaj {year}',
+    titleKeyword: 'JIC',
+    titleRest: 'Badminton Cup {year}',
     cta: 'Přihlásit se',
   },
 
@@ -43,6 +43,22 @@ export const site = {
       'Zástupný text: nezáleží na tom, jestli hrajete pravidelně, nebo jste raketu drželi naposledy na chatě. Jde hlavně o to se potkat a zahrát si.',
     ],
     format: 'Smíšená čtyřhra, páry losem',
+  },
+
+  /**
+   * Časová osa nad registrací. `current` je id aktuálního kroku; kroky před
+   * ním se zobrazí jako hotové, kroky za ním jako budoucí.
+   */
+  timeline: {
+    heading: 'Harmonogram',
+    steps: [
+      { id: 'registration', label: 'Přihlašování' },
+      { id: 'date', label: 'Výběr termínu' },
+      { id: 'format', label: 'Výběr formátu turnaje' },
+      { id: 'tournament', label: 'Turnaj' },
+    ],
+    current: 'registration',
+    currentBadge: 'Právě teď',
   },
 
   registration: {

@@ -5,13 +5,15 @@ import { initAbout, initFooter, initHero } from './sections/hero';
 import { initRegistration } from './sections/registration';
 import { initGallery } from './sections/gallery';
 import { initHistory } from './sections/history';
+import { initTimeline } from './sections/timeline';
 
-document.title = `${site.name} – badmintonový turnaj`;
+document.title = site.name;
 
 const section = (id: string) => document.getElementById(id)!;
 
 // Sekce nezávislé na ročníku se načítají hned.
 initFooter(document.getElementById('paticka')!);
+initTimeline(section('harmonogram'));
 initGallery(section('galerie'));
 initHistory(section('historie'));
 
