@@ -158,10 +158,6 @@ function formHtml() {
             .join('')}
         </div>
       </fieldset>
-      <div class="field">
-        <label for="reg-note">Poznámka <span class="muted">(nepovinné)</span></label>
-        <textarea id="reg-note" name="note" rows="3" maxlength="500"></textarea>
-      </div>
       <!-- Honeypot: lidé ho nevidí, boti ho vyplní. -->
       <div class="hp" aria-hidden="true">
         <label for="reg-website">Web</label>
@@ -237,7 +233,6 @@ function bindForm(form: HTMLFormElement, ctx: FormContext) {
         gender: data.get('gender') as Gender,
         format: withFormat ? (data.get('format') as TournamentFormat) : null,
         level: withLevel ? (data.get('level') as SkillLevel) : null,
-        note: String(data.get('note') ?? ''),
         website: String(data.get('website') ?? ''),
       });
     } catch (err) {

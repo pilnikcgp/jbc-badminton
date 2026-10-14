@@ -29,7 +29,6 @@ export function initHero(root: HTMLElement, edition: Edition | null) {
           <span class="hero-name">${escapeHtml(site.hero.titleKeyword)}</span>
           <span class="hero-name-2">${escapeHtml(rest)}</span>
         </h1>
-        <a class="btn" href="#registrace">${escapeHtml(site.hero.cta)}</a>
       </div>
     </div>`;
 

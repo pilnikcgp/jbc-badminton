@@ -134,7 +134,6 @@ export async function register(input: {
   format: TournamentFormat | null;
   /** null = databáze ještě nezná úroveň, parametr se neposílá. */
   level: SkillLevel | null;
-  note: string;
   website: string;
 }): Promise<RegisterResult> {
   const res = await supabase.rpc('register', {
@@ -143,7 +142,7 @@ export async function register(input: {
     p_gender: input.gender,
     ...(input.format ? { p_format: input.format } : {}),
     ...(input.level ? { p_level: input.level } : {}),
-    p_note: input.note,
+    // p_note se neposílá: pole Poznámka ve formuláři není, funkce má default null
     p_website: input.website,
   });
   return unwrap(res) as RegisterResult;

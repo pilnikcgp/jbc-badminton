@@ -56,8 +56,12 @@
   box-sizing: border-box;
 }
 
+/* Kotvy: sekce začne přesně pod připnutým menu (nadpis má odstup díky
+   paddingu sekce). --nav-h měří nav.ts včetně bezpečné zóny nahoře;
+   záloha pro dobu před spuštěním JS. */
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-h, calc(66px + env(safe-area-inset-top, 0px)));
   -webkit-text-size-adjust: 100%;
 }
 
@@ -502,6 +506,188 @@ textarea:focus-visible {
 }
 
 /* ==========================================================================
+   Horní menu: připnuté nahoře, bílé s fialovou linkou. Na mobilu (< 820 px)
+   jsou běžné odkazy v hamburger menu, tlačítko Registrace zůstává vedle.
+   ========================================================================== */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--white);
+  border-bottom: 2px solid var(--jic-purple);
+  /* bezpečná zóna (výřez displeje), když stránka sahá až k okrajům */
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 64px;
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+
+.nav-brand {
+  margin-right: auto;
+  font-weight: 700;
+  font-size: 1.0625rem;
+  line-height: 1.15;
+  text-decoration: none;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 4px;
+  margin: 0 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  font-weight: 500;
+  text-decoration: none;
+  /* spodní linka pro hover a aktuální sekci, bez posunu textu */
+  box-shadow: inset 0 -3px 0 transparent;
+  transition: box-shadow 0.15s ease;
+}
+
+.nav-link:hover {
+  box-shadow: inset 0 -3px 0 var(--jic-yellow-2);
+}
+
+.nav-link[aria-current] {
+  box-shadow: inset 0 -3px 0 var(--jic-purple);
+}
+
+.nav-cta[aria-current] {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.nav-toggle {
+  display: none;
+}
+
+@media (max-width: 819px) {
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 2px solid var(--jic-purple);
+    border-radius: 0;
+    background: var(--white);
+    color: var(--jic-purple);
+    cursor: pointer;
+  }
+
+  /* tři čárky; otevřené menu = křížek */
+  .nav-toggle span,
+  .nav-toggle span::before,
+  .nav-toggle span::after {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: currentColor;
+  }
+
+  .nav-toggle span {
+    position: relative;
+  }
+
+  .nav-toggle span::before,
+  .nav-toggle span::after {
+    content: '';
+    position: absolute;
+    left: 0;
+  }
+
+  .nav-toggle span::before {
+    top: -6px;
+  }
+
+  .nav-toggle span::after {
+    top: 6px;
+  }
+
+  .nav-open .nav-toggle span {
+    background: transparent;
+  }
+
+  .nav-open .nav-toggle span::before {
+    top: 0;
+    transform: rotate(45deg);
+  }
+
+  .nav-open .nav-toggle span::after {
+    top: 0;
+    transform: rotate(-45deg);
+  }
+
+  /* Rozbalené odkazy pod menu přes celou šířku, překrývají obsah. */
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 2px 0 0; /* pod fialovou linku menu */
+    padding: 8px max(var(--gutter), env(safe-area-inset-right, 0px)) 16px
+      max(var(--gutter), env(safe-area-inset-left, 0px));
+    flex-direction: column;
+    background: var(--white);
+    border-bottom: 2px solid var(--jic-purple);
+  }
+
+  .nav-open .nav-links {
+    display: flex;
+  }
+
+  .nav-link {
+    min-height: 48px;
+    padding: 0;
+    font-size: 1.125rem;
+  }
+
+  .nav-link:hover,
+  .nav-link[aria-current] {
+    box-shadow: none;
+    text-decoration: underline;
+    text-decoration-thickness: 3px;
+    text-underline-offset: 6px;
+  }
+
+  .nav-cta {
+    padding: 0 14px;
+  }
+}
+
+@media (max-width: 359px) {
+  .nav-inner {
+    gap: 8px;
+  }
+
+  .nav-brand {
+    font-size: 0.9375rem;
+  }
+}
+
+/* ==========================================================================
    Hero: fotka s pixelovou maskou
    Mřížka: 5 čtverců (--px) na kratší stranu hero. Fotka je skupinová a lidé
    vyplňují celou šířku, proto plocha s názvem leží vedle fotky (desktop)
@@ -640,7 +826,7 @@ textarea:focus-visible {
 
 /* H1 ve dvou řádcích: klíčové slovo tučně, doplněk v display písmu. */
 .hero h1 {
-  margin: 0 0 20px;
+  margin: 0;
 }
 
 .hero-name {

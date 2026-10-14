@@ -7,12 +7,14 @@ import { initGallery } from './sections/gallery';
 import { initHistory } from './sections/history';
 import { initTimeline } from './sections/timeline';
 import { initFaq } from './sections/faq';
+import { initNav } from './sections/nav';
 
 document.title = site.name;
 
 const section = (id: string) => document.getElementById(id)!;
 
 // Sekce nezávislé na ročníku se načítají hned.
+initNav(document.getElementById('menu')!);
 initFooter(document.getElementById('paticka')!);
 initTimeline(section('harmonogram'));
 initFaq(section('caste-otazky'));

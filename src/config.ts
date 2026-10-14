@@ -17,7 +17,24 @@ export const site = {
      */
     titleKeyword: 'JIC',
     titleRest: 'Badminton Cup {year}',
-    cta: 'Přihlásit se',
+  },
+
+  /**
+   * Horní menu připnuté při scrollování. `href` je id sekce v index.html.
+   * Tlačítko (cta) zůstává viditelné i na mobilu, odkazy se tam schovají
+   * do hamburger menu.
+   */
+  nav: {
+    brand: 'JIC Badminton Cup',
+    label: 'Hlavní menu',
+    menuOpen: 'Otevřít menu',
+    menuClose: 'Zavřít menu',
+    links: [
+      { label: 'FAQs', href: '#caste-otazky' },
+      { label: 'Fotogalerie', href: '#galerie' },
+      { label: 'Síň slávy', href: '#historie' },
+    ],
+    cta: { label: 'Registrace', href: '#registrace' },
   },
 
   footer: {
