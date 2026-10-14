@@ -99,10 +99,10 @@ export const site = {
      */
     levelQuestion: 'Úroveň',
     levels: [
-      { value: 'none', label: 'Nepopsaný list', hint: 'badminton jsem nikdy nehrál/a' },
-      { value: 'beginner', label: 'Začátečník', hint: 'raketu jsem držel/a párkrát v ruce' },
-      { value: 'intermediate', label: 'Středně pokročilý', hint: 'jdu si zahrát párkrát do roka' },
-      { value: 'advanced', label: 'Pokročilý', hint: 'hraji pravidelně' },
+      { value: 'none', label: 'Nepopsaný list', hint: 'Badminton jsem nikdy nehrál/a.' },
+      { value: 'beginner', label: 'Začátečnická', hint: 'Raketu jsem držel/a párkrát v ruce.' },
+      { value: 'intermediate', label: 'Středně pokročilá', hint: 'Jdu si zahrát párkrát do roka.' },
+      { value: 'advanced', label: 'Pokročilá', hint: 'Hraji pravidelně.' },
     ],
     levelPrivacy: 'Nezveřejňuje se, slouží jen pro los vyrovnaných párů.',
     pollHeading: 'Průběžný výsledek ankety o formátu',
