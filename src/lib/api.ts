@@ -11,6 +11,8 @@ export type Gender = 'male' | 'female';
 
 export type TournamentFormat = 'mixed_doubles' | 'gender_doubles' | 'mixed_singles' | 'gender_singles';
 
+export type SkillLevel = 'none' | 'beginner' | 'intermediate' | 'advanced';
+
 export interface PollResult {
   format: TournamentFormat;
   position: number;
@@ -103,12 +105,35 @@ export async function fetchPollResults(): Promise<PollResult[] | null> {
   return unwrap(res) as PollResult[];
 }
 
+/**
+ * Zná databáze otázku na úroveň (migrace 20261014140000)? Úroveň je neveřejná,
+ * takže ji nelze poznat z pohledu; zavoláme proto register() s vyplněným
+ * honeypotem a parametrem p_level. Nová funkce na honeypot vrátí 'ok' a nic
+ * neuloží, stará funkce parametr nezná → PostgREST vrátí PGRST202.
+ */
+export async function supportsSkillLevel(): Promise<boolean> {
+  const res = await supabase.rpc('register', {
+    p_full_name: '',
+    p_email: '',
+    p_gender: '',
+    p_format: null,
+    p_level: null,
+    p_note: null,
+    p_website: 'capability-probe',
+  });
+  if (res.error?.code === 'PGRST202') return false;
+  unwrap(res);
+  return true;
+}
+
 export async function register(input: {
   fullName: string;
   email: string;
   gender: Gender;
   /** null = databáze ještě nemá anketu, parametr se neposílá. */
   format: TournamentFormat | null;
+  /** null = databáze ještě nezná úroveň, parametr se neposílá. */
+  level: SkillLevel | null;
   note: string;
   website: string;
 }): Promise<RegisterResult> {
@@ -117,6 +142,7 @@ export async function register(input: {
     p_email: input.email,
     p_gender: input.gender,
     ...(input.format ? { p_format: input.format } : {}),
+    ...(input.level ? { p_level: input.level } : {}),
     p_note: input.note,
     p_website: input.website,
   });

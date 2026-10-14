@@ -32,11 +32,16 @@ Web je neveřejný: `<meta name="robots" content="noindex">` a hlavička
    `supabase/migrations/20260922120000_init.sql` → **Run**.
    Vytvoří tabulky, pohledy, RLS a funkci `register()`. Pak stejně spusťte
    další migrace ze složky `supabase/migrations/` v pořadí podle názvu
-   (`20261014120000_format_poll.sql` přidává anketu o formátu turnaje).
+   (`20261014120000_format_poll.sql` přidává anketu o formátu turnaje,
+   `20261014140000_skill_level.sql` neveřejnou otázku na úroveň).
 
-   Web je s migrací ankety kompatibilní v obou stavech: dokud v databázi
-   není pohled `format_poll_results`, otázku na formát i graf skryje
-   a registruje bez formátu; po migraci je zapne sám (stačí obnovit stránku).
+   Web je s oběma migracemi kompatibilní v obou stavech: dokud databáze
+   anketu (pohled `format_poll_results`) nebo úroveň (parametr `p_level`
+   funkce `register`) nezná, příslušnou otázku skryje a registruje bez ní;
+   po migraci ji zapne sám (stačí obnovit stránku). Úroveň se zjišťuje
+   zkušebním voláním `register` s vyplněným honeypotem, které nic neuloží.
+   **Úroveň je neveřejná:** nepatří do žádného pohledu, vidí ji jen
+   organizátoři v Supabase (`select full_name, skill_level from registrations`).
    Pohled `format_poll_results` (stejně jako `registrations_public`) běží
    záměrně s právy vlastníka – nepřepínejte ho na `security_invoker`.
 3. Nový dotaz → vložte celý `supabase/seed.sql` → **Run**. Nahraje ročníky
@@ -236,7 +241,7 @@ aspoň jeden tým s vyplněným umístěním.
 | `editions` | ročníky: rok, název, termín, místo, stav, `poll_url` (fáze 2) |
 | `players` | hráči (jméno je unikátní) |
 | `teams` | páry v ročníku a konečné umístění (fáze 3 na ně naváže zápasy) |
-| `registrations` | přihlášky včetně `preferred_format` (anketa); `player_id` pro propojení s hráčem ve fázi 3 |
+| `registrations` | přihlášky včetně `preferred_format` (anketa) a neveřejné `skill_level` (úroveň pro los); `player_id` pro propojení s hráčem ve fázi 3 |
 | `current_edition` | pohled: aktuální ročník (nejvyšší `year`) |
 | `edition_summary` | pohled: počet týmů a zda má ročník výsledky |
 | `player_results` | pohled: hráč × ročník, umístění, spoluhráč, úspěšnost |

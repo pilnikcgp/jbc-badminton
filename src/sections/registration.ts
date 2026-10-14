@@ -2,11 +2,13 @@ import {
   fetchPollResults,
   fetchRegistrations,
   register,
+  supportsSkillLevel,
   type Edition,
   type Gender,
   type PollResult,
   type PublicRegistration,
   type RegisterResult,
+  type SkillLevel,
   type TournamentFormat,
 } from '../lib/api';
 import { escapeHtml, plural } from '../lib/format';
@@ -39,6 +41,7 @@ export function initRegistration(root: HTMLElement, edition: Edition | null) {
   const pollWrap = root.querySelector<HTMLElement>('.poll')!;
   const pollEl = root.querySelector<HTMLElement>('.poll-body')!;
   const formatField = root.querySelector<HTMLFieldSetElement>('.format-field');
+  const levelField = root.querySelector<HTMLFieldSetElement>('.level-field');
 
   // Anketa se zapne, až když ji databáze má (pohled format_poll_results).
   // Do té doby je otázka skrytá a vypnutá a registrace běží bez formátu,
@@ -80,6 +83,24 @@ export function initRegistration(root: HTMLElement, edition: Edition | null) {
   const pollReady = refreshPoll();
   refreshList();
 
+  // Otázka na úroveň se zapne, až když ji databáze zná (stejný princip jako
+  // u ankety, jen se zjišťuje zkušebním voláním register() přes honeypot,
+  // protože úroveň v žádném veřejném pohledu není).
+  let levelAvailable = false;
+  const refreshLevel = async (): Promise<boolean> => {
+    try {
+      levelAvailable = await supportsSkillLevel();
+    } catch (err) {
+      console.error(err);
+      levelAvailable = true; // cílový stav; při výpadku sítě otázku radši ukážeme
+    }
+    if (levelField) {
+      levelField.hidden = !levelAvailable;
+      levelField.disabled = !levelAvailable;
+    }
+    return levelAvailable;
+  };
+
   const form = root.querySelector<HTMLFormElement>('form');
   if (form) {
     bindForm(form, {
@@ -87,6 +108,9 @@ export function initRegistration(root: HTMLElement, edition: Edition | null) {
       pollReady,
       refreshPoll,
       isPollAvailable: () => pollAvailable,
+      levelReady: refreshLevel(),
+      refreshLevel,
+      isLevelAvailable: () => levelAvailable,
     });
   }
 }
@@ -110,6 +134,18 @@ function formHtml() {
           <label><input type="radio" name="gender" value="female" required /><span>Hráčka</span></label>
           <label><input type="radio" name="gender" value="male" /><span>Hráč</span></label>
         </div>
+      </fieldset>
+      <fieldset class="field level-field" hidden disabled aria-describedby="reg-level-hint">
+        <legend>${escapeHtml(t.levelQuestion)}</legend>
+        <div class="choices">
+          ${t.levels
+            .map(
+              (l, i) =>
+                `<label><input type="radio" name="level" value="${l.value}"${i === 0 ? ' required' : ''} /><span><span class="choice-text"><span>${escapeHtml(l.label)}</span><small>${escapeHtml(l.hint)}</small></span></span></label>`,
+            )
+            .join('')}
+        </div>
+        <small id="reg-level-hint" class="muted">${escapeHtml(t.levelPrivacy)}</small>
       </fieldset>
       <fieldset class="field format-field" hidden disabled>
         <legend>${escapeHtml(t.formatQuestion)}</legend>
@@ -142,6 +178,10 @@ interface FormContext {
   pollReady: Promise<boolean>;
   refreshPoll: () => Promise<boolean>;
   isPollAvailable: () => boolean;
+  /** Úvodní zjištění, zda databáze zná úroveň. */
+  levelReady: Promise<boolean>;
+  refreshLevel: () => Promise<boolean>;
+  isLevelAvailable: () => boolean;
 }
 
 function bindForm(form: HTMLFormElement, ctx: FormContext) {
@@ -157,7 +197,8 @@ function bindForm(form: HTMLFormElement, ctx: FormContext) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     message.hidden = true;
-    await ctx.pollReady; // otázka na formát musí být zapnutá/vypnutá před kontrolou
+    // otázky na formát a úroveň musí být zapnuté/vypnuté před kontrolou
+    await Promise.all([ctx.pollReady, ctx.levelReady]);
     // Formulář bez ankety si před odesláním ověří, zda ji databáze mezitím
     // nedostala (migrace při otevřené stránce). Pokud ano, nejdřív ukáže
     // otázku na formát a registraci zatím neodešle.
@@ -167,7 +208,15 @@ function bindForm(form: HTMLFormElement, ctx: FormContext) {
       form.querySelector<HTMLInputElement>('input[name="format"]')?.focus();
       return;
     }
+    // Totéž pro úroveň.
+    if (!ctx.isLevelAvailable() && (await ctx.refreshLevel())) {
+      form.classList.add('was-validated');
+      show(t.levelNowRequired, 'error');
+      form.querySelector<HTMLInputElement>('input[name="level"]')?.focus();
+      return;
+    }
     const withFormat = ctx.isPollAvailable();
+    const withLevel = ctx.isLevelAvailable();
 
     if (!form.checkValidity()) {
       form.classList.add('was-validated');
@@ -187,6 +236,7 @@ function bindForm(form: HTMLFormElement, ctx: FormContext) {
         email: String(data.get('email') ?? ''),
         gender: data.get('gender') as Gender,
         format: withFormat ? (data.get('format') as TournamentFormat) : null,
+        level: withLevel ? (data.get('level') as SkillLevel) : null,
         note: String(data.get('note') ?? ''),
         website: String(data.get('website') ?? ''),
       });
@@ -216,6 +266,12 @@ function bindForm(form: HTMLFormElement, ctx: FormContext) {
           form.classList.add('was-validated');
           show(t.formatNowRequired, 'error');
           form.querySelector<HTMLInputElement>('input[name="format"]')?.focus();
+          break;
+        }
+        if (!withLevel && (await ctx.refreshLevel())) {
+          form.classList.add('was-validated');
+          show(t.levelNowRequired, 'error');
+          form.querySelector<HTMLInputElement>('input[name="level"]')?.focus();
           break;
         }
         show(t.invalid, 'error');

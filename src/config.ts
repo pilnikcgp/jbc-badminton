@@ -86,10 +86,23 @@ export const site = {
       { value: 'mixed_singles', label: 'Smíšená dvouhra' },
       { value: 'gender_singles', label: 'Dvouhra ženy / dvouhra muži' },
     ],
+    /**
+     * Úroveň: povinná, NEVEŘEJNÁ (jen pro los vyrovnaných párů).
+     * Hodnoty odpovídají enumu skill_level v databázi.
+     */
+    levelQuestion: 'Úroveň',
+    levels: [
+      { value: 'none', label: 'Nepopsaný list', hint: 'badminton jsem nikdy nehrál/a' },
+      { value: 'beginner', label: 'Začátečník', hint: 'raketu jsem držel/a párkrát v ruce' },
+      { value: 'intermediate', label: 'Středně pokročilý', hint: 'jdu si zahrát párkrát do roka' },
+      { value: 'advanced', label: 'Pokročilý', hint: 'hraji pravidelně' },
+    ],
+    levelPrivacy: 'Nezveřejňuje se, slouží jen pro los vyrovnaných párů.',
     pollHeading: 'Průběžný výsledek ankety o formátu',
     pollEmpty: 'Zatím nikdo nehlasoval.',
     /** Když se anketa zapne, zatímco má někdo otevřený starší formulář. */
     formatNowRequired: 'Doplňte prosím ještě preferovaný formát turnaje a odešlete znovu.',
+    levelNowRequired: 'Doplňte prosím ještě svou úroveň a odešlete znovu.',
     listEmpty: 'Zatím nikdo. Buďte první!',
   },
 

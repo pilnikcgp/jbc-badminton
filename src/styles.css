@@ -429,7 +429,7 @@ textarea:focus-visible {
   cursor: pointer;
 }
 
-.choices span {
+.choices label > span {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -441,13 +441,26 @@ textarea:focus-visible {
 }
 
 /* čtvercový „radio“ indikátor */
-.choices span::before {
+.choices label > span::before {
   content: '';
   flex: none;
   width: 18px;
   height: 18px;
   border: 2px solid currentColor;
   background: var(--white);
+}
+
+/* volba s popiskem pod názvem (úroveň) */
+.choice-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.3;
+}
+
+.choice-text small {
+  font-size: 0.9rem;
+  font-weight: 400;
 }
 
 .choices input:checked + span {
