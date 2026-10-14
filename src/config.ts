@@ -62,7 +62,7 @@ export const site = {
       {
         id: 'registration',
         label: 'Přihlašování',
-        detail: 'Do 18.12.2026',
+        detail: 'Do 31.12.2026',
         /** Tlačítko u aktuálního kroku (nepovinné). */
         cta: { label: 'Přihlásit se', href: '#registrace' },
       },
@@ -77,7 +77,7 @@ export const site = {
 
   registration: {
     heading: 'Registrace',
-    intro: 'Přihlašování končí 18. prosince 2026.',
+    intro: 'Přihlašování končí 31. prosince 2026.',
     closed: 'Registrace je teď uzavřená.',
     notYetOpen: 'Registrace zatím není otevřená. Sledujte tuto stránku.',
     success: 'Hotovo, jste přihlášení. Těšíme se!',
