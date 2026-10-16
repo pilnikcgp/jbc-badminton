@@ -61,7 +61,8 @@ export interface PublicRegistration {
   created_at: string;
 }
 
-export type RegisterResult = 'ok' | 'duplicate_email' | 'registration_closed' | 'invalid';
+/** 'duplicate_name' vrací databáze až po migraci 20261016120000_unique_name. */
+export type RegisterResult = 'ok' | 'duplicate_email' | 'duplicate_name' | 'registration_closed' | 'invalid';
 
 function unwrap<T>({ data, error }: { data: T | null; error: { message: string } | null }): T {
   if (error) throw new Error(error.message);

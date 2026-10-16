@@ -254,6 +254,10 @@ function bindForm(form: HTMLFormElement, ctx: FormContext) {
         show(t.duplicate, 'error');
         form.querySelector<HTMLInputElement>('#reg-email')?.focus();
         break;
+      case 'duplicate_name':
+        show(t.duplicateName, 'error');
+        form.querySelector<HTMLInputElement>('#reg-name')?.focus();
+        break;
       case 'invalid':
         // Formulář bez otázky na formát, ale databáze mezitím dostala anketu
         // (migrace proběhla, zatímco byla stránka otevřená): ukážeme otázku.

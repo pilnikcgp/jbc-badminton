@@ -33,7 +33,8 @@ Web je neveřejný: `<meta name="robots" content="noindex">` a hlavička
    Vytvoří tabulky, pohledy, RLS a funkci `register()`. Pak stejně spusťte
    další migrace ze složky `supabase/migrations/` v pořadí podle názvu
    (`20261014120000_format_poll.sql` přidává anketu o formátu turnaje,
-   `20261014140000_skill_level.sql` neveřejnou otázku na úroveň).
+   `20261014140000_skill_level.sql` neveřejnou otázku na úroveň,
+   `20261016120000_unique_name.sql` zákaz duplicitních jmen v ročníku).
 
    Web je s oběma migracemi kompatibilní v obou stavech: dokud databáze
    anketu (pohled `format_poll_results`) nebo úroveň (parametr `p_level`
@@ -122,7 +123,9 @@ order by created_at;
 ```
 
 Opravy a mazání přihlášek dělejte také v Supabase (Table Editor nebo SQL).
-Jeden e-mail může být v ročníku přihlášený jen jednou (velikost písmen se ignoruje).
+Jeden e-mail i jedno jméno může být v ročníku přihlášené jen jednou (velikost písmen
+a nadbytečné mezery se ignorují, diakritika ne). Kontrola jmen je v migraci
+`20261016120000_unique_name.sql`.
 
 ## 4. Úprava textů
 

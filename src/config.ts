@@ -82,6 +82,7 @@ export const site = {
     notYetOpen: 'Registrace zatím není otevřená. Sledujte tuto stránku.',
     success: 'Hotovo, jste přihlášení. Těšíme se!',
     duplicate: 'Tento e-mail už je v letošním ročníku přihlášený.',
+    duplicateName: 'Hráč nebo hráčka s tímto jménem už je v letošním ročníku přihlášený/á.',
     invalid: 'Zkontrolujte prosím vyplněné údaje.',
     error: 'Registraci se nepodařilo odeslat. Zkuste to prosím znovu.',
     listHeading: 'Přihlášení',
