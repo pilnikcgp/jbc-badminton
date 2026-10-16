@@ -135,6 +135,17 @@ function formHtml() {
           <label><input type="radio" name="gender" value="male" /><span>Hráč</span></label>
         </div>
       </fieldset>
+      <fieldset class="field format-field" hidden disabled>
+        <legend>${escapeHtml(t.formatQuestion)}</legend>
+        <div class="choices">
+          ${t.formats
+            .map(
+              (f, i) =>
+                `<label><input type="radio" name="format" value="${f.value}"${i === 0 ? ' required' : ''} /><span>${escapeHtml(f.label)}</span></label>`,
+            )
+            .join('')}
+        </div>
+      </fieldset>
       <fieldset class="field level-field" hidden disabled aria-describedby="reg-level-hint">
         <legend>${escapeHtml(t.levelQuestion)}</legend>
         <div class="choices">
@@ -146,17 +157,6 @@ function formHtml() {
             .join('')}
         </div>
         <small id="reg-level-hint" class="muted">${escapeHtml(t.levelPrivacy)}</small>
-      </fieldset>
-      <fieldset class="field format-field" hidden disabled>
-        <legend>${escapeHtml(t.formatQuestion)}</legend>
-        <div class="choices">
-          ${t.formats
-            .map(
-              (f, i) =>
-                `<label><input type="radio" name="format" value="${f.value}"${i === 0 ? ' required' : ''} /><span>${escapeHtml(f.label)}</span></label>`,
-            )
-            .join('')}
-        </div>
       </fieldset>
       <!-- Honeypot: lidé ho nevidí, boti ho vyplní. -->
       <div class="hp" aria-hidden="true">

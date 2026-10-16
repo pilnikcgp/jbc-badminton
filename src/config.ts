@@ -104,7 +104,7 @@ export const site = {
       { value: 'intermediate', label: 'Středně pokročilá', hint: 'Jdu si zahrát párkrát do roka.' },
       { value: 'advanced', label: 'Pokročilá', hint: 'Hraji pravidelně.' },
     ],
-    levelPrivacy: 'Nezveřejňuje se, slouží jen pro los vyrovnaných párů.',
+    levelPrivacy: 'Nezveřejňuje se, slouží jen pro los vyrovnaných párů v případné čtyřhře.',
     pollHeading: 'Průběžný výsledek ankety o formátu',
     pollEmpty: 'Zatím nikdo nehlasoval.',
     /** Když se anketa zapne, zatímco má někdo otevřený starší formulář. */
