@@ -8,11 +8,12 @@
 [build.environment]
   NODE_VERSION = "22"
 
-# Interní web: nikdy neindexovat (doplňuje <meta name="robots">).
+# Interní web: nikdy neindexovat ani neukládat (doplňuje <meta name="robots">,
+# platí i pro fotky a další soubory). AI roboty blokuje public/robots.txt.
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Robots-Tag = "noindex, nofollow"
+    X-Robots-Tag = "noindex, nofollow, noarchive, noimageindex"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Content-Type-Options = "nosniff"
 
