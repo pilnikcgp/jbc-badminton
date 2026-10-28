@@ -68,7 +68,7 @@ export const site = {
       },
       { id: 'date', label: 'Výběr termínu', detail: 'Do 8.1.2027' },
       { id: 'format', label: 'Losování', detail: 'Do 18.1.2027' },
-      { id: 'tournament', label: 'Turnaj', detail: '' },
+      { id: 'tournament', label: 'Turnaj', detail: 'TBA' },
     ] as { id: string; label: string; detail?: string; cta?: { label: string; href: string } }[],
     current: 'registration',
     /** Štítek u aktuálního kroku, který nemá vlastní tlačítko (cta). */
