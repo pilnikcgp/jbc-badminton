@@ -129,7 +129,7 @@ function formHtml() {
         <small id="reg-email-hint" class="muted">Nezveřejňuje se, slouží jen pro organizační informace.</small>
       </div>
       <fieldset class="field">
-        <legend>Hraji jako</legend>
+        <legend>Jsem</legend>
         <div class="segmented">
           <label><input type="radio" name="gender" value="female" required /><span>Hráčka</span></label>
           <label><input type="radio" name="gender" value="male" /><span>Hráč</span></label>
