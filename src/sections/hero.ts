@@ -139,6 +139,6 @@ export function initFooter(root: HTMLElement) {
   root.innerHTML = `
     <div class="container footer-inner">
       <span>${escapeHtml(f.organizer)}</span>
-      <a class="footer-brand" href="${escapeHtml(f.url)}" rel="noopener">${mark}<span class="sr-only"> – jic.cz</span></a>
+      <a class="footer-brand" href="${escapeHtml(f.url)}" target="_blank" rel="noopener">${mark}<span class="sr-only"> – jic.cz (otevře se v novém okně)</span></a>
     </div>`;
 }

@@ -38,7 +38,7 @@ export const site = {
   },
 
   footer: {
-    organizer: 'Pořádá JIC',
+    organizer: 'Supported by JIC',
     url: 'https://www.jic.cz',
     /**
      * Logo JIC z brand kitu (složka 02_Logo), např. '/brand/jic-logo.svg'.
