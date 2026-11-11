@@ -66,8 +66,8 @@ export const site = {
         /** Tlačítko u aktuálního kroku (nepovinné). */
         cta: { label: 'Přihlásit se', href: '#registrace' },
       },
-      { id: 'date', label: 'Výběr termínu', detail: 'Do 8.1.2027' },
-      { id: 'format', label: 'Losování', detail: 'Do 18.1.2027' },
+      { id: 'date', label: 'Výběr termínu', detail: 'Do 13.12.2026' },
+      { id: 'format', label: 'Losování', detail: 'Do 18.12.2026' },
       { id: 'tournament', label: 'Turnaj', detail: 'TBA' },
     ] as { id: string; label: string; detail?: string; cta?: { label: string; href: string } }[],
     current: 'registration',
