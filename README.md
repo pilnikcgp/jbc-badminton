@@ -34,7 +34,8 @@ Web je neveřejný: `<meta name="robots" content="noindex">` a hlavička
    další migrace ze složky `supabase/migrations/` v pořadí podle názvu
    (`20261014120000_format_poll.sql` přidává anketu o formátu turnaje,
    `20261014140000_skill_level.sql` neveřejnou otázku na úroveň,
-   `20261016120000_unique_name.sql` zákaz duplicitních jmen v ročníku).
+   `20261016120000_unique_name.sql` zákaz duplicitních jmen v ročníku,
+   `20261117120000_date_poll.sql` anketu o termínu a automatickou uzávěrku registrace).
 
    Web je s oběma migracemi kompatibilní v obou stavech: dokud databáze
    anketu (pohled `format_poll_results`) nebo úroveň (parametr `p_level`
@@ -127,15 +128,40 @@ Jeden e-mail i jedno jméno může být v ročníku přihlášené jen jednou (v
 a nadbytečné mezery se ignorují, diakritika ne). Kontrola jmen je v migraci
 `20261016120000_unique_name.sql`.
 
+**Automatická uzávěrka:** když má ročník vyplněné `registration_closes_at`,
+web od toho okamžiku nové přihlášky nepřijme (organizátoři v Supabase ano).
+
+### Anketa o termínu
+
+Termíny jsou v tabulce `date_options` (jeden řádek = začátek termínu),
+okno hlasování v `editions.date_poll_opens_at` a `date_poll_closes_at`.
+Pro ročník 2027 vše nastavuje `supabase/date_poll_2027.sql` (spustit
+v SQL Editoru po migraci). Sekce „Výběr termínu“ se na webu ukáže od začátku
+hlasování, po uzávěrce zůstanou jen výsledky. Hlasovat můžou jen přihlášení
+(e-mailem z registrace); opakované hlasování přepíše předchozí. Veřejně jsou
+jen součty, detail vidí organizátoři:
+
+```sql
+select r.full_name,
+       to_char(o.starts_at at time zone 'Europe/Prague', 'DD. MM. HH24:MI') as termin,
+       v.answer
+from date_votes v
+join registrations r on r.id = v.registration_id
+join date_options o on o.id = v.option_id
+order by o.starts_at, v.answer, r.full_name;
+```
+
 ## 4. Úprava textů
 
 Všechny texty jsou v **`src/config.ts`**: název akce, horní menu (`nav`),
 perex a kroky časové osy (`timeline`), možnosti ankety, časté otázky (`faq.items`,
 novou otázku stačí připsat na konec), hlášky formuláře a nadpisy sekcí.
 
-**Časová osa:** aktuální krok nastavíte v `timeline.current` (`registration`,
-`date`, `format`, `tournament`). Kroky před ním se zobrazí jako hotové. Upravte, commitněte
-a pushněte do `main`, Netlify web nasadí samo.
+**Časová osa:** aktuální krok se mění sám podle data v `until` u každého kroku
+(poslední den kroku). Podle aktuálního kroku se mění i tlačítko v menu
+(`nav.ctaByStep`: Registrace → Hlasovat). Ručně jde krok vynutit v
+`timeline.current` (`registration`, `date`, `format`, `tournament` místo `'auto'`).
+Upravte, commitněte a pushněte do `main`, Netlify web nasadí samo.
 
 **Detaily kroků** (datum, místo, formát…) doplníte u kroku do `detail`,
 např. `detail: 'do 8. 1. 2027'`. Prázdný `detail: ''` se nezobrazí.

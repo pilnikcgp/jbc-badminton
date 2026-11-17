@@ -1,12 +1,28 @@
 import { escapeHtml } from '../lib/format';
 import { site } from '../config';
 
+/** Dnešní datum v Praze jako RRRR-MM-DD (porovnatelné s `until`). */
+const todayPrague = () =>
+  new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Prague' }).format(new Date());
+
+/**
+ * Id aktuálního kroku: ručně nastavený `current`, jinak (current: 'auto')
+ * první krok, jehož `until` ještě neuplynul; po všech termínech poslední krok.
+ */
+export function currentStepId(): string {
+  const { steps, current } = site.timeline;
+  if (current !== 'auto') return current;
+  const today = todayPrague();
+  return (steps.find((s) => !s.until || s.until >= today) ?? steps[steps.length - 1]).id;
+}
+
 /**
  * Perex a pod ním vodorovná časová osa (na úzkém mobilu svislá). Aktuální
  * krok i detaily kroků se nastavují v src/config.ts (timeline).
  */
 export function initTimeline(root: HTMLElement) {
-  const { steps, current, heading, intro, currentBadge } = site.timeline;
+  const { steps, heading, intro, currentBadge } = site.timeline;
+  const current = currentStepId();
   const currentIndex = Math.max(
     0,
     steps.findIndex((s) => s.id === current),

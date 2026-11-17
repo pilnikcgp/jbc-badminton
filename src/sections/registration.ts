@@ -17,7 +17,10 @@ import { site } from '../config';
 const t = site.registration;
 
 export function initRegistration(root: HTMLElement, edition: Edition | null) {
-  const open = edition?.status === 'registration_open';
+  // Uzávěrku hlídá i databáze; tady jen aby se po ní formulář neukazoval.
+  const pastDeadline =
+    !!edition?.registration_closes_at && Date.now() >= Date.parse(edition.registration_closes_at);
+  const open = edition?.status === 'registration_open' && !pastDeadline;
   const closedText =
     !edition || edition.status === 'planned' ? t.notYetOpen : t.closed;
 

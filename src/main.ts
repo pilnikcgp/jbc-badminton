@@ -8,6 +8,7 @@ import { initHistory } from './sections/history';
 import { initTimeline } from './sections/timeline';
 import { initFaq } from './sections/faq';
 import { initNav } from './sections/nav';
+import { initDatePoll } from './sections/datePoll';
 
 document.title = site.name;
 
@@ -17,6 +18,7 @@ const section = (id: string) => document.getElementById(id)!;
 initNav(document.getElementById('menu')!);
 initFooter(document.getElementById('paticka')!);
 initTimeline(section('harmonogram'));
+initDatePoll(section('termin'));
 initFaq(section('caste-otazky'));
 initGallery(section('galerie'));
 initHistory(section('historie'));

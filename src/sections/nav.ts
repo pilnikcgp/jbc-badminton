@@ -1,5 +1,6 @@
 import { escapeHtml } from '../lib/format';
 import { site } from '../config';
+import { currentStepId } from './timeline';
 
 /** Šířka, pod kterou se běžné odkazy schovají do hamburger menu (shodně se styles.css). */
 const MOBILE = '(max-width: 819px)';
@@ -11,11 +12,12 @@ const MOBILE = '(max-width: 819px)';
  */
 export function initNav(root: HTMLElement) {
   const n = site.nav;
+  const cta = n.ctaByStep[currentStepId()];
   root.innerHTML = `
     <div class="container nav-inner">
       <a class="nav-brand" href="#uvod">${escapeHtml(n.brand)}</a>
       <nav class="nav" aria-label="${escapeHtml(n.label)}">
-        <a class="btn btn-sm nav-cta" href="${escapeHtml(n.cta.href)}">${escapeHtml(n.cta.label)}</a>
+        ${cta ? `<a class="btn btn-sm nav-cta" href="${escapeHtml(cta.href)}">${escapeHtml(cta.label)}</a>` : ''}
         <!-- na mobilu hamburger vedle tlačítka, odkazy se rozbalí pod menu;
              v DOM za ním, aby po otevření šly odkazy tabulátorem hned dál -->
         <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="nav-links"

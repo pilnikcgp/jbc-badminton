@@ -28,8 +28,14 @@ export const site = {
     label: 'Hlavní menu',
     menuOpen: 'Otevřít menu',
     menuClose: 'Zavřít menu',
-    /** Tlačítko je v menu první, odkazy následují v pořadí sekcí na stránce. */
-    cta: { label: 'Registrace', href: '#registrace' },
+    /**
+     * Tlačítko v menu (první, před odkazy) podle aktuálního kroku časové osy.
+     * Krok, který tu není, tlačítko nemá.
+     */
+    ctaByStep: {
+      registration: { label: 'Registrace', href: '#registrace' },
+      date: { label: 'Hlasovat', href: '#termin' },
+    } as Record<string, { label: string; href: string }>,
     links: [
       { label: 'FAQs', href: '#caste-otazky' },
       { label: 'Fotogalerie', href: '#galerie' },
@@ -49,10 +55,12 @@ export const site = {
   },
 
   /**
-   * Časová osa pod hero. `intro` je krátký perex nad ní. `current` je id
-   * aktuálního kroku; kroky před ním se zobrazí jako hotové, kroky za ním
-   * jako budoucí. `detail` (např. datum, místo, formát) se zobrazí pod názvem
-   * kroku, jen když je vyplněný; prázdný '' se nezobrazí.
+   * Časová osa pod hero. `intro` je krátký perex nad ní. Aktuální krok se
+   * určí sám podle data: první krok, jehož `until` (poslední den kroku,
+   * RRRR-MM-DD, pražský čas) ještě neuplynul. Kroky před ním jsou hotové,
+   * za ním budoucí. Ručně jde aktuální krok vynutit v `current` (id kroku
+   * místo 'auto'). `detail` (např. datum, místo, formát) se zobrazí pod
+   * názvem kroku, jen když je vyplněný; prázdný '' se nezobrazí.
    */
   timeline: {
     heading: 'Harmonogram',
@@ -63,16 +71,49 @@ export const site = {
         id: 'registration',
         label: 'Přihlašování',
         detail: 'Do 30.11.2026',
+        until: '2026-11-30',
         /** Tlačítko u aktuálního kroku (nepovinné). */
         cta: { label: 'Přihlásit se', href: '#registrace' },
       },
-      { id: 'date', label: 'Výběr termínu', detail: 'Do 13.12.2026' },
-      { id: 'format', label: 'Losování', detail: 'Do 18.12.2026' },
+      {
+        id: 'date',
+        label: 'Výběr termínu',
+        detail: 'Do 13.12.2026',
+        until: '2026-12-13',
+        cta: { label: 'Hlasovat', href: '#termin' },
+      },
+      { id: 'format', label: 'Losování', detail: 'Do 18.12.2026', until: '2026-12-18' },
       { id: 'tournament', label: 'Turnaj', detail: 'TBA' },
-    ] as { id: string; label: string; detail?: string; cta?: { label: string; href: string } }[],
-    current: 'registration',
+    ] as { id: string; label: string; detail?: string; until?: string; cta?: { label: string; href: string } }[],
+    current: 'auto',
     /** Štítek u aktuálního kroku, který nemá vlastní tlačítko (cta). */
     currentBadge: 'Právě teď',
+  },
+
+  /**
+   * Anketa o termínu. Termíny, začátek a uzávěrka hlasování jsou v databázi
+   * (tabulky date_options a editions, viz supabase/date_poll_2027.sql).
+   * Sekce se ukáže od začátku hlasování; po uzávěrce zůstanou výsledky.
+   */
+  datePoll: {
+    heading: 'Výběr termínu',
+    intro: 'U každého termínu označte, jestli můžete. Hlasovat můžou jen přihlášení, hlasujte e-mailem z registrace.',
+    deadline: 'Hlasování končí {date}.',
+    closed: 'Hlasování skončilo. Termín brzy oznámíme.',
+    answers: { yes: 'Můžu', maybe: 'V nouzi', no: 'Nemůžu' },
+    emailLabel: 'E-mail z registrace',
+    submit: 'Odeslat hlasování',
+    sending: 'Odesílám…',
+    success: 'Díky, hlas je uložený. Změnit ho můžete dalším odesláním se stejným e-mailem.',
+    notRegistered: 'Tento e-mail mezi letošními přihlášenými nenacházíme. Zkontrolujte ho, prosím.',
+    invalid: 'Vyplňte prosím e-mail a odpověď u každého termínu.',
+    pollClosed: 'Hlasování teď neprobíhá.',
+    error: 'Hlasování se nepodařilo odeslat. Zkuste to prosím znovu.',
+    resultsHeading: 'Průběžné výsledky',
+    resultsHeadingClosed: 'Výsledky',
+    resultsEmpty: 'Zatím nikdo nehlasoval.',
+    leader: 'Zatím vede',
+    leaderClosed: 'Nejvíc hlasů',
   },
 
   registration: {

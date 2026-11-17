@@ -27,7 +27,25 @@ export interface Edition {
   venue: string | null;
   status: EditionStatus;
   poll_url: string | null;
+  /** Sloupce z migrace 20261117120000; před ní chybí (undefined). */
+  registration_closes_at?: string | null;
+  date_poll_opens_at?: string | null;
+  date_poll_closes_at?: string | null;
 }
+
+export interface DatePollOption {
+  option_id: number;
+  starts_at: string;
+  yes: number;
+  maybe: number;
+  no: number;
+  voters: number;
+  opens_at: string | null;
+  closes_at: string | null;
+}
+
+export type DateAnswer = 'yes' | 'maybe' | 'no';
+export type VoteResult = 'ok' | 'not_registered' | 'poll_closed' | 'invalid';
 
 export interface EditionSummary {
   edition_id: number;
@@ -125,6 +143,29 @@ export async function supportsSkillLevel(): Promise<boolean> {
   if (res.error?.code === 'PGRST202') return false;
   unwrap(res);
   return true;
+}
+
+/**
+ * Termíny ankety o termínu se součty odpovědí. Vrací null, když databáze
+ * anketu ještě nemá (migrace 20261117120000 zatím neproběhla).
+ */
+export async function fetchDatePoll(): Promise<DatePollOption[] | null> {
+  const res = await supabase.from('date_poll_results').select('*').order('starts_at');
+  if (res.error && ['PGRST205', '42P01'].includes(res.error.code)) return null;
+  return unwrap(res) as DatePollOption[];
+}
+
+export async function voteDates(input: {
+  email: string;
+  votes: Record<number, DateAnswer>;
+  website: string;
+}): Promise<VoteResult> {
+  const res = await supabase.rpc('vote_dates', {
+    p_email: input.email,
+    p_votes: input.votes,
+    p_website: input.website,
+  });
+  return unwrap(res) as VoteResult;
 }
 
 export async function register(input: {
