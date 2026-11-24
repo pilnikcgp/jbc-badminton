@@ -97,7 +97,7 @@ export const site = {
    */
   datePoll: {
     heading: 'Výběr termínu',
-    intro: 'U každého termínu označte, jestli můžete. Hlasovat můžou jen přihlášení, hlasujte e-mailem z registrace.',
+    intro: 'U každého termínu označte, jestli můžete. Turnaj obvykle trvá okolo 4 hodin. Hlasovat můžou jen přihlášení, hlasujte e-mailem z registrace.',
     deadline: 'Hlasování končí {date}.',
     closed: 'Hlasování skončilo. Termín brzy oznámíme.',
     answers: { yes: 'Můžu', maybe: 'V nouzi', no: 'Nemůžu' },
